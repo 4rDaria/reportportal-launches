@@ -24,6 +24,7 @@
         <junit.platform.runner.version>1.10.2</junit.platform.runner.version>
         <selenide.version>7.2.1</selenide.version>
         <commons-io.version>2.15.1</commons-io.version>
+        <logger-java-log4j.version>5.1.8</logger-java-log4j.version>
         <reportportal.agent.version>5.1.11</reportportal.agent.version>
         <reportportal.logger.version>5.1.8</reportportal.logger.version>
     </properties>
@@ -135,7 +136,7 @@
         <dependency>
             <groupId>com.epam.reportportal</groupId>
             <artifactId>logger-java-log4j</artifactId>
-            <version>5.1.8</version>
+            <version>${logger-java-log4j.version}</version>
         </dependency>
 
     </dependencies>
