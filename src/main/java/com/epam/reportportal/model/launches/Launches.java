@@ -7,8 +7,8 @@ import java.util.List;
 
 @Getter
 public class Launches {
-    @JsonProperty("content")
+    @JsonProperty
     List<Launch> content;
-    @JsonProperty("page")
+    @JsonProperty
     Page page;
 }

@@ -1,6 +1,5 @@
 package com.epam.reportportal.api;
 
-import com.epam.reportportal.TestRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;

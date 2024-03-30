@@ -8,40 +8,40 @@ import java.util.Map;
 
 @Getter
 public class Launch {
-    @JsonProperty("owner")
+    @JsonProperty
     private String owner;
-    @JsonProperty("description")
+    @JsonProperty
     private String description;
-    @JsonProperty("id")
+    @JsonProperty
     private int id;
-    @JsonProperty("uuid")
+    @JsonProperty
     private String uuid;
-    @JsonProperty("name")
+    @JsonProperty
     private String name;
-    @JsonProperty("number")
+    @JsonProperty
     private int number;
-    @JsonProperty("startTime")
+    @JsonProperty
     private long startTime;
-    @JsonProperty("endTime")
+    @JsonProperty
     private long endTime;
-    @JsonProperty("lastModified")
+    @JsonProperty
     private long lastModified;
-    @JsonProperty("status")
+    @JsonProperty
     private String status;
-    @JsonProperty("statistics")
+    @JsonProperty
     private Statistics statistics;
-    @JsonProperty("attributes")
+    @JsonProperty
     private List<Attribute> attributes;
-    @JsonProperty("mode")
+    @JsonProperty
     private String mode;
-    @JsonProperty("analysing")
+    @JsonProperty
     private List<String> analysing;
-    @JsonProperty("approximateDuration")
+    @JsonProperty
     private double approximateDuration;
-    @JsonProperty("hasRetries")
+    @JsonProperty
     private boolean hasRetries;
-    @JsonProperty("rerun")
+    @JsonProperty
     private boolean rerun;
-    @JsonProperty("metadata")
+    @JsonProperty
     private Map<String, String> metadata;
 }

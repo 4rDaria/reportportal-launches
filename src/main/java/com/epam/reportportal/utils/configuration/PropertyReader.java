@@ -14,7 +14,7 @@ public class PropertyReader {
 
     }
 
-    public static String gtProperty(String key, String defaultValue) {
+    public static String getProperty(String key, String defaultValue) {
         String property = getProperty(key);
         return property == null ? defaultValue : property;
     }

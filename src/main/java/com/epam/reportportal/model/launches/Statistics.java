@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Statistics {
-    @JsonProperty("executions")
+    @JsonProperty
     private Executions executions;
-    @JsonProperty("defects")
+    @JsonProperty
     private Defects defects;
 }

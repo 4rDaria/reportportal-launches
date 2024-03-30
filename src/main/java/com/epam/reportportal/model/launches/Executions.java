@@ -3,13 +3,13 @@ package com.epam.reportportal.model.launches;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Executions {
-    @JsonProperty("total")
+    @JsonProperty
     private int total;
-    @JsonProperty("passed")
+    @JsonProperty
     private int passed;
-    @JsonProperty("failed")
+    @JsonProperty
     private int failed;
-    @JsonProperty("skipped")
+    @JsonProperty
     private int skipped;
 
 }

@@ -3,12 +3,12 @@ package com.epam.reportportal.model.launches;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Page {
-    @JsonProperty("number")
+    @JsonProperty
     int number;
-    @JsonProperty("size")
+    @JsonProperty
     int size;
-    @JsonProperty("totalElements")
+    @JsonProperty
     int totalElements;
-    @JsonProperty("totalPages")
+    @JsonProperty
     int totalPages;
 }

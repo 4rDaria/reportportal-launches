@@ -6,15 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonUtils {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private JsonUtils() {
 
-    public static Launches parseJsonToLaunches(String json) {
-        try {
-            return objectMapper.readValue(json, Launches.class);
-        } catch (Exception e) {
-            throw new RuntimeException("Error parsing JSON to Launches", e);
-        }
     }
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String writeValueAsString(Object requestBodyMap) {
         try {

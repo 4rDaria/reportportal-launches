@@ -14,11 +14,11 @@ public class HamburgerMenu extends ElWrapper {
         super(element);
     }
 
-    public ElementsCollection getMenuItems() {
+    public ElementsCollection menuItems() {
         return $$("getMenuItems");
     }
 
-    public SelenideElement getMenuItemByAction() {
+    public SelenideElement menuItemByAction() {
         return $("getMenuItemByAction");
     }
 

@@ -11,6 +11,10 @@ import static java.time.ZoneOffset.UTC;
 
 public class DateTimeUtils {
 
+    private DateTimeUtils() {
+
+    }
+
     public static String convertEpochMilliToDateTimeString(long timestamp) {
         Instant instant = Instant.ofEpochMilli(timestamp);
 

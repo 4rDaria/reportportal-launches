@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Attribute {
 
-    @JsonProperty("key")
+    @JsonProperty
     String key;
-    @JsonProperty("value")
+    @JsonProperty
     String value;
 }

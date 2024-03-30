@@ -11,23 +11,23 @@ public class GridRow extends ElWrapper {
         super(element);
     }
 
-    public String getLaunchId() {
+    public String launchId() {
         return "getLaunchId";
     }
 
-    public SelenideElement getCategory() {
+    public SelenideElement category() {
         return $("getCategory");
     }
 
-    public SelenideElement getCategoryCount() {
+    public SelenideElement categoryCount() {
         return $("getCategoryCount");
     }
 
-    public String getStartTime() {
+    public String startTime() {
         return "2024-03-24T22:45:41.857Z";
     }
 
-    public SelenideElement getCheckbox() {
+    public SelenideElement checkbox() {
         return $("getCheckbox");
     }
 
