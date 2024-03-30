@@ -1,0 +1,19 @@
+# Compiled class file
+*.class
+# Log files
+*.log
+# Package Files #
+*.jar
+# Maven target directory
+target/
+# IntelliJ project files
+.idea/
+*.iws
+*.iml
+# Build files
+Build/
+# Operating System Files #
+.DS_Store        # macOS
+Thumbs.db        # Windows
+# Local application properties #
+**/src/main/resources/*.properties

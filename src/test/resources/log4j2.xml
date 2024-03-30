@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout>
+                <Pattern>%d %p %c{2} [%t] %l %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+        <ReportPortalLog4j2Appender name="ReportPortalAppender">
+            <PatternLayout>
+                <Pattern>%d [%t] %-5level %logger{36} - %msg%n%throwable"</Pattern>
+            </PatternLayout>
+        </ReportPortalLog4j2Appender>
+        <File name="File" fileName="target/logs/reportportal-launches.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{2} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ReportPortalAppender"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
