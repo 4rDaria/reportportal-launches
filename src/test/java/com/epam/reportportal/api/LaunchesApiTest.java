@@ -3,9 +3,12 @@ package com.epam.reportportal.api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.Assert.assertTrue;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class LaunchesApiTest {
 
     private static final Logger logger = LogManager.getRootLogger();

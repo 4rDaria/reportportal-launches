@@ -154,6 +154,10 @@
                         <version>${surefire-junit-platform.version}</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <parallel>classes</parallel>
+                    <threadCount>4</threadCount>
+                </configuration>
             </plugin>
         </plugins>
     </build>
