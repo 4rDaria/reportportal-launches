@@ -8,7 +8,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.Assert.assertTrue;
 
-@Execution(ExecutionMode.CONCURRENT)
 public class LaunchesApiTest {
 
     private static final Logger logger = LogManager.getRootLogger();
