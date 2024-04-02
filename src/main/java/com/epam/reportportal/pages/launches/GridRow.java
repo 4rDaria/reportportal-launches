@@ -12,30 +12,31 @@ public class GridRow extends ElWrapper {
     }
 
     public String launchId() {
-        return "getLaunchId";
+        return element.getAttribute("data-id");
     }
 
-    public SelenideElement category() {
-        return $("getCategory");
+    public SelenideElement category(String category) {
+        return element.$(format("div[class*='%s']", category));
     }
 
-    public SelenideElement categoryCount() {
-        return $("getCategoryCount");
+    public SelenideElement categoryCount(String category) {
+        return category(category).$("div").$("a");
     }
 
     public String startTime() {
-        return "2024-03-24T22:45:41.857Z";
+        return category(START_TIME_CELL_CSS).$("div").$$("span").last().innerText();
     }
 
     public SelenideElement checkbox() {
-        return $("getCheckbox");
+        return element.$("input[type='checkbox']");
     }
 
     public HamburgerMenu hamburgerMenu() {
-        return new HamburgerMenu($("HamburgerMenu"));
+        element.$("div[class*='hamburger-icon--']").click();
+        return new HamburgerMenu($("div[class*='hamburger-menu-actions']"));
     }
 
-    public SelenideElement donutElementByType() {
-        return $("donutElementByType");
+    public SelenideElement donutElementByType(String type) {
+        return element.$x(format(".//div[contains(@class,'launchSuiteGrid__%s')]//*[@class='donut']", type));
     }
 }

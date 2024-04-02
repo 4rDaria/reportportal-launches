@@ -13,16 +13,17 @@ public class ActionMenu extends ElWrapper {
         super(element);
     }
 
-    public ElementsCollection actionMenuItems() {
-        return $$("actionMenuItems");
+    public ElementsCollection actionMenuItems(){
+        return element.$$("div[class*='menu-item'] > span");
     }
 
-    public SelenideElement actionMenuItemByAction() {
-        return $("actionMenuItemByAction");
+    public SelenideElement actionMenuItemByAction(String action){
+        return actionMenuItems().filterBy(text(action)).first();
     }
 
-    public ModalWindow compareLaunchesModal() {
-        return new ModalWindow($("compareLaunchesModal"));
+    public ModalWindow compareLaunchesModal(){
+        actionMenuItemByAction("Compare").click();
+        return new ModalWindow($x("//div[contains(@class, 'modalLayout__modal-window')]"));
     }
 
 }
