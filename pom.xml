@@ -127,6 +127,12 @@
             <artifactId>logger-java-log4j</artifactId>
             <version>${logger-java-log4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.9.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
