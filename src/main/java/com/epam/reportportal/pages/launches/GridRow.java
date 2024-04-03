@@ -4,6 +4,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.epam.reportportal.pages.common.ElWrapper;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.epam.reportportal.constants.Constants.START_TIME_CELL_CSS;
+import static java.lang.String.format;
 
 public class GridRow extends ElWrapper {
 
