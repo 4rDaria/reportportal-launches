@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.open;
+import static com.epam.reportportal.constants.Constants.PROJECT;
 
 @Component
 @NoArgsConstructor
@@ -48,6 +49,7 @@ public class Login {
         setInputPassword(user.getPassword());
         clickLoginButton();
         logger.info("Login performed");
+        open(baseUrl + "/ui/#" + PROJECT + "/launches/all");
         return new LaunchesPage();
     }
 }

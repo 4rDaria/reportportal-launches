@@ -2,10 +2,10 @@ package com.epam.reportportal.ui;
 
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.back;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static com.epam.reportportal.constants.Constants.*;
+
 import static com.epam.reportportal.services.Login.login;
 import static com.epam.reportportal.services.Login.openLoginPage;
 import static org.testng.Assert.assertTrue;
@@ -23,7 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -35,13 +35,12 @@ public class LaunchesPageTest {
 
     private static LaunchesPage launchesPage;
 
-    @BeforeClass
+    @BeforeTest
     public void setUp() {
         User testUser = UserCreator.adminUser();
         openLoginPage();
         getWebDriver().manage().window().maximize();
         launchesPage = login(testUser);
-        open(baseUrl + "/ui/#" + PROJECT + "/launches/all");
         sleep(1000);
     }
 
@@ -84,7 +83,7 @@ public class LaunchesPageTest {
         //unselect launches
         toggleSelection(numberLaunchesToCompare);
 
-        sleep(1000);
+        sleep(500);
     }
 
     private void toggleSelection(List<GridRow> numberLaunchesToCompare) {
