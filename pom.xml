@@ -22,6 +22,7 @@
         <jackson-databind.version>2.17.0</jackson-databind.version>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <junit.platform.runner.version>1.10.2</junit.platform.runner.version>
+        <junit-platform-launcher>1.10.2</junit-platform-launcher>
         <selenide.version>7.2.1</selenide.version>
         <commons-io.version>2.15.1</commons-io.version>
         <logger-java-log4j.version>5.1.8</logger-java-log4j.version>
@@ -100,6 +101,11 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit-platform-launcher}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
