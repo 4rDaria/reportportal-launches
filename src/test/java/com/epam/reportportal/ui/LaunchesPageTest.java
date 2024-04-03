@@ -91,7 +91,6 @@ public class LaunchesPageTest {
 
     private void toggleSelection(List<GridRow> numberLaunchesToCompare){
         JavascriptExecutor jse = (JavascriptExecutor)getWebDriver();
-
         for (GridRow launch : numberLaunchesToCompare) {
             jse.executeScript("arguments[0].click();", launch.checkbox());
         }
