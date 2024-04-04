@@ -25,11 +25,8 @@
         <selenide.version>7.2.1</selenide.version>
         <commons-io.version>2.15.1</commons-io.version>
         <logger-java-log4j.version>5.1.8</logger-java-log4j.version>
-        <reportportal.agent.version>5.1.11</reportportal.agent.version>
-        <reportportal.logger.version>5.1.8</reportportal.logger.version>
         <junit-platform-suite.version>1.10.2</junit-platform-suite.version>
-        <cucumber-java.version>7.16.1</cucumber-java.version>
-        <cucumber-junit-platform-engine.version>7.16.1</cucumber-junit-platform-engine.version>
+        <cucumber.version>7.16.1</cucumber.version>
     </properties>
 
     <dependencies>
@@ -113,15 +110,14 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>${cucumber-java.version}</version>
+            <version>${cucumber.version}</version>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
-            <version>${cucumber-junit-platform-engine.version}</version>
+            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 
