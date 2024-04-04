@@ -8,15 +8,16 @@ import static com.codeborne.selenide.Selenide.$$;
 public class LaunchesPage {
 
     public static ElementsCollection gridRowElements() {
-        return $$("gridRowElements");
+        return $$("div[class*='grid-row-wrapper']");
     }
 
     public static ElementsCollection titles() {
-        return $$("titles");
+        return $$("[class*='title-full']");
     }
 
-    public static ActionMenu openActionMenu() {
-        return new ActionMenu($("openActionMenu"));
+    public static ActionMenu actionMenuButton() {
+        $("div[class*='ghost-menu-button']").click();
+        return new ActionMenu($("div[class*='ghostMenuButton__menu--']"));
     }
 
 }
