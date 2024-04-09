@@ -14,19 +14,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-        <surefire-junit-platform.version>3.2.2</surefire-junit-platform.version>
         <lombok.version>1.18.30</lombok.version>
         <spring.version>6.1.5</spring.version>
         <log4j.version>2.23.1</log4j.version>
         <rest-assured.version>5.4.0</rest-assured.version>
         <jackson-databind.version>2.17.0</jackson-databind.version>
-        <junit.jupiter.version>5.10.2</junit.jupiter.version>
-        <junit.platform.runner.version>1.10.2</junit.platform.runner.version>
         <selenide.version>7.2.1</selenide.version>
         <commons-io.version>2.15.1</commons-io.version>
         <logger-java-log4j.version>5.1.8</logger-java-log4j.version>
         <reportportal.agent.version>5.1.11</reportportal.agent.version>
         <reportportal.logger.version>5.1.8</reportportal.logger.version>
+        <testng.version>7.9.0</testng.version>
+        <surefire-testng.version>3.2.5</surefire-testng.version>
+        <jcommander.version>1.82</jcommander.version>
     </properties>
 
     <dependencies>
@@ -92,13 +92,13 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.9.0</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.82</version>
+            <version>${jcommander.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -115,17 +115,16 @@
             <version>${commons-io.version}</version>
         </dependency>
 
-        <!-- reportportal dependencies -->
-        <dependency>
-            <groupId>com.epam.reportportal</groupId>
-            <artifactId>agent-java-junit5</artifactId>
-            <version>${reportportal.agent.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.epam.reportportal</groupId>
             <artifactId>logger-java-log4j</artifactId>
             <version>${logger-java-log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.9.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
@@ -140,7 +139,7 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>3.2.5</version>
+                        <version>${surefire-testng.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>

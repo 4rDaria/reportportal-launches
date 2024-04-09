@@ -8,7 +8,9 @@ import static java.lang.String.format;
 
 public class PropertyReader {
 
-    private static final Properties propertiesFromFile = readPropertyFromFile("project.properties");
+    private static final String environment = "web";
+
+    private static final Properties propertiesFromFile = readPropertyFromFile(environment + ".properties");
 
     private PropertyReader() {
 
