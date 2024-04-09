@@ -15,7 +15,7 @@ public class LaunchesPage {
         return $$("[class*='title-full']");
     }
 
-    public static ActionMenu actionMenuButton() {
+    public static ActionMenu openActionMenu() {
         $("div[class*='ghost-menu-button']").click();
         return new ActionMenu($("div[class*='ghostMenuButton__menu--']"));
     }

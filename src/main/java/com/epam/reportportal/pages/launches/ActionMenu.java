@@ -21,7 +21,7 @@ public class ActionMenu extends ElWrapper {
         return actionMenuItems().filterBy(text(action)).first();
     }
 
-    public ModalWindow compareModal(){
+    public ModalWindow compareLaunchesModal(){
         actionMenuItemByAction("Compare").click();
         return new ModalWindow($x("//div[contains(@class, 'modalLayout__modal-window')]"));
     }
