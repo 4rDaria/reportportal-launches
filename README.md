@@ -30,6 +30,9 @@ cd reportportal-launches
 ### Set environment variable
 set env in PropertyReader file (private static final String environment) as "web" or "local"
 
+### Generate tests data
+using credentials you need to Generate test data via reportportal ui interface (using api or ui menu)
+
 ### Run the tests
 To run all test:
 mvn clean test
