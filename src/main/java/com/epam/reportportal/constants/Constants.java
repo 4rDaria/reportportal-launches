@@ -1,8 +1,6 @@
 package com.epam.reportportal.constants;
 
 public class Constants {
-    public static final String PROJECT = "mp_project";
-
     public static final String HAMBURGER_CSS = "hamburger-col";
     public static final String START_TIME_CELL_CSS = "start-time-col";
     public static final String TOTAL_COUNT_CELL_CSS = "total-col";
