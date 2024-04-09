@@ -19,5 +19,4 @@ public class LaunchesPage {
         $("div[class*='ghost-menu-button']").click();
         return new ActionMenu($("div[class*='ghostMenuButton__menu--']"));
     }
-
 }

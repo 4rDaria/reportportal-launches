@@ -2,22 +2,18 @@ package com.epam.reportportal.services;
 
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.launches.LaunchesPage;
-import com.epam.reportportal.utils.configuration.EnvironmentConfiguration;
-import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
-import org.springframework.stereotype.Component;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.open;
+import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
 
-@Component
-@NoArgsConstructor
 public class Login {
     private static final Logger LOGGER = LogManager.getRootLogger();
-    public static final String BASE_URL = EnvironmentConfiguration.baseUrlForCurrentEnv();
+    public static final String BASE_URL = baseUrlForCurrentEnv();
     public static final String PROJECT = projectNameForCurrentEnv();
     private static final String LOGIN_PAGE_URL = BASE_URL + "/ui/#login";
     private static void setInputLogin(String username) {

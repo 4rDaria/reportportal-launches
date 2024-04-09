@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.common.ModalWindow;
 import com.epam.reportportal.pages.launches.ActionMenu;
@@ -20,7 +21,9 @@ import com.epam.reportportal.services.UserCreator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,19 +35,17 @@ import java.util.List;
 public class LaunchesPageTest {
 
     private static final Logger LOGGER = LogManager.getRootLogger();
-
     public static final String BASE_URL = baseUrlForCurrentEnv();
     public static final String PROJECT = projectNameForCurrentEnv();
-
     private static LaunchesPage launchesPage;
 
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         User testUser = UserCreator.withCredentialsFromProperty();
         openLoginPage();
         getWebDriver().manage().window().maximize();
         launchesPage = login(testUser);
-        sleep(1000);
+        sleep(500);
     }
 
     @Test
@@ -155,6 +156,11 @@ public class LaunchesPageTest {
             Assert.assertEquals(expectedUrl, getWebDriver().getCurrentUrl());
             back();
         }
+    }
+
+    @AfterEach
+    public void tearDown() {
+        WebDriverRunner.closeWebDriver();
     }
 
 }
