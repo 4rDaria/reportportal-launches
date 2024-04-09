@@ -5,7 +5,7 @@ Test Automation Framework (TAF) for performing API and UI tests for launches fun
 ### API Testing
 Includes test cases to validate the API endpoints related to launches functionality.
 
-### UI Testing 
+### UI Testing
 Includes test cases to validate the user interface of the launches functionality.
 
 ### Integration with ReportPortal
@@ -26,6 +26,9 @@ git clone https://github.com/your-username/reportportal-launches.git
 
 ### Navigate to the project directory
 cd reportportal-launches
+
+### Set environment variable
+set env in PropertyReader file (private static final String environment) as "web" or "local"
 
 ### Run the tests
 To run all test:
