@@ -14,24 +14,23 @@ import org.apache.logging.log4j.Logger;
 
 public class EachLaunchesContainsAllTestCountDataSteps {
 
-    private static final Logger logger = LogManager.getRootLogger();
+    private static final Logger LOGGER = LogManager.getRootLogger();
     private static LaunchesPage launchesPage;
     private ElementsCollection gridRowElements;
 
     @When("I choose any launch")
     public void iChooseAnyLaunch() {
-        System.out.println("it is working");
+        gridRowElements = launchesPage.gridRowElements();
     }
 
-    @Then("Each launch should contain test count data for category")
-    public void eachLaunchShouldContainTestCountDataForCategory() {
-        gridRowElements = launchesPage.gridRowElements();
+    @Then("Each launch should contain test count data for {string} with {string}")
+    public void eachLaunchShouldContainTestCountDataForCategory(String category, String categoryCss) {
         for (SelenideElement gridRow : gridRowElements) {
             GridRow launch = new GridRow(gridRow);
-            SelenideElement element = launch.category("total-col");
+            SelenideElement element = launch.category(categoryCss);
             String id = launch.launchId();
             if (element == null) {
-                logger.info("Element " + "total-col" + " not found in launch: " + id);
+                LOGGER.info("Element " + category + " not found in launch: " + id);
             }
         }
     }

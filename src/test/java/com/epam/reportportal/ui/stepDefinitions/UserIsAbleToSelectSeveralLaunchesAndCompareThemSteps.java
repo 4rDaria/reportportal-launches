@@ -45,10 +45,10 @@ public class UserIsAbleToSelectSeveralLaunchesAndCompareThemSteps {
 
     @Then("I can compare launches")
     public void compareLaunches() {
-        //openAndCloseActionMenu();
-        System.out.println("I can compare");
+        openAndCloseActionMenu();
+
         //unselect launches
-        //toggleSelection(numberLaunchesToCompare);
+        toggleSelection(numberLaunchesToCompare);
     }
 
     private void toggleSelection(List<GridRow> numberLaunchesToCompare) {
