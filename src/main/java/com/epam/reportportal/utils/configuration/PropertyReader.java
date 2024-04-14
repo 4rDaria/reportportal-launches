@@ -3,12 +3,15 @@ package com.epam.reportportal.utils.configuration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import static java.lang.String.format;
 
 public class PropertyReader {
 
-    private static final Properties propertiesFromFile = readPropertyFromFile("project.properties");
+    private static final String environment = "web";
+
+    private static final Properties propertiesFromFile = readPropertyFromFile(environment + ".properties");
 
     private PropertyReader() {
 
