@@ -10,16 +10,18 @@ import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.back;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.epam.reportportal.constants.Constants.PROJECT;
+import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
+import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
 import static org.junit.Assert.assertEquals;
 
 public class UserIsAbleToMoveToAppropriateLaunchViaDonutElementSteps {
 
     private static final Logger LOGGER = LogManager.getRootLogger();
+    public static final String BASE_URL = baseUrlForCurrentEnv();
+    public static final String PROJECT = projectNameForCurrentEnv();
     private static LaunchesPage launchesPage;
     private ElementsCollection gridRowElements;
 
@@ -39,9 +41,9 @@ public class UserIsAbleToMoveToAppropriateLaunchViaDonutElementSteps {
             LOGGER.info("Can't check moving to appropriate via " + category + " because there no data in this category");
         } else {
             launch.donutElementByType(elementIdentificator).click();
-            sleep(500);
+            sleep(1000);
 
-            String expectedUrl = baseUrl + "/ui/#" + PROJECT + "/launches/all/" + launchId +
+            String expectedUrl = BASE_URL + "/ui/#" + PROJECT + "/launches/all/" + launchId +
                     "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter.in.issueType%3D" +
                     elementIdentificator + "001";
 

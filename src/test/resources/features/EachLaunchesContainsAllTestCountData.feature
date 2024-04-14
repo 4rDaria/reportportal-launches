@@ -15,8 +15,7 @@ Feature: Each launch contains all test count data
        |"PASSED"        | "passed-col"         |
        |"FAILED"        | "failed-col"         |
        |"SKIPPED"       | "skipped-col"        |
-       |"PRODUCT_BUG"   | "product-bug-col"    |
-       |"AUTO_BUG       | "auto-bug-col"       |
-       |"SYSTEM_ISSUE"  | "system-issue-col"   |
-       |"TO_INVESTIGATE"| "to-investigate-col" |
+       |"PRODUCT_BUG"   | "pb-col"             |
+       |"SYSTEM_ISSUE"  | "si-col"             |
+       |"TO_INVESTIGATE"| "ti-col"             |
 

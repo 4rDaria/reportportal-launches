@@ -16,7 +16,7 @@ public class CommonSteps {
 
     @Given("I am logged in and on the launches page")
     public void iAmLoggedInAndOnTheLaunchesPage() {
-        User testUser = UserCreator.adminUser();
+        User testUser = UserCreator.withCredentialsFromProperty();
         openLoginPage();
         getWebDriver().manage().window().maximize();
         launchesPage = login(testUser);
