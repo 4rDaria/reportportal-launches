@@ -2,8 +2,10 @@ package com.epam.reportportal.ui.stepDefinitions;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.epam.reportportal.pages.launches.GridRow;
 import com.epam.reportportal.pages.launches.LaunchesPage;
+import io.cucumber.java.After;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +51,11 @@ public class UserIsAbleToMoveToAppropriateLaunchClickingCountElementSteps {
             assertEquals(expectedUrl, getWebDriver().getCurrentUrl());
             back();
         }
+    }
+
+    @After()
+    public void tearDownForUi() {
+        WebDriverRunner.closeWebDriver();
     }
 }
 
