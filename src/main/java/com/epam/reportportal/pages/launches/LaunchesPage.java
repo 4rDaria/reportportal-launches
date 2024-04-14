@@ -7,15 +7,15 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class LaunchesPage {
 
-    public static ElementsCollection gridRowElements() {
+    public ElementsCollection gridRowElements() {
         return $$("div[class*='grid-row-wrapper']");
     }
 
-    public static ElementsCollection titles() {
+    public ElementsCollection titles() {
         return $$("[class*='title-full']");
     }
 
-    public static ActionMenu openActionMenu() {
+    public ActionMenu openActionMenu() {
         $("div[class*='ghost-menu-button']").click();
         return new ActionMenu($("div[class*='ghostMenuButton__menu--']"));
     }

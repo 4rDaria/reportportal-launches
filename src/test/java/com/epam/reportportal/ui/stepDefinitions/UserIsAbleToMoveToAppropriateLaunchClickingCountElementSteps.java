@@ -3,6 +3,7 @@ package com.epam.reportportal.ui.stepDefinitions;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+import com.epam.reportportal.cucumber.TestContext;
 import com.epam.reportportal.pages.launches.GridRow;
 import com.epam.reportportal.pages.launches.LaunchesPage;
 import io.cucumber.java.After;
@@ -14,25 +15,33 @@ import org.apache.logging.log4j.Logger;
 import static com.codeborne.selenide.Selenide.back;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.epam.reportportal.cucumber.Context.GRID_ROW_ELEMENTS;
+import static com.epam.reportportal.cucumber.Context.LAUNCH;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
 import static org.junit.Assert.assertEquals;
 
-public class UserIsAbleToMoveToAppropriateLaunchClickingCountElementSteps {
+public class UserIsAbleToMoveToAppropriateLaunchClickingCountElementSteps extends BaseStep{
 
     private static final Logger LOGGER = LogManager.getRootLogger();
-    public static final String BASE_URL = baseUrlForCurrentEnv();
-    public static final String PROJECT = projectNameForCurrentEnv();
+    //public static final String BASE_URL = baseUrlForCurrentEnv();
+    //public static final String PROJECT = projectNameForCurrentEnv();
     private static LaunchesPage launchesPage;
     private ElementsCollection gridRowElements;
 
-    private GridRow launch;
-    private String launchId;
+    //private GridRow launch;
+    //private String launchId;
+
+    public UserIsAbleToMoveToAppropriateLaunchClickingCountElementSteps(TestContext testContext) {
+        super(testContext);
+    }
 
     @When("I choose count element")
     public void chooseCountElement(){
-        ElementsCollection gridRowElements = launchesPage.gridRowElements();
-        launch = new GridRow(gridRowElements.first());
+       // ElementsCollection gridRowElements = launchesPage.gridRowElements();
+        ElementsCollection gridRowElements = (ElementsCollection) getScenarioContext().getContext(GRID_ROW_ELEMENTS);
+        //GridRow launch = new GridRow(gridRowElements.first());
+        getScenarioContext().setContext(LAUNCH, new GridRow(gridRowElements.first()));
         launchId = launch.launchId();
     }
 
