@@ -4,15 +4,13 @@ import com.epam.reportportal.cucumber.ScenarioContext;
 import com.epam.reportportal.cucumber.TestContext;
 import lombok.Getter;
 
+@Getter
 public class BaseStep {
 
-    @Getter
     private ScenarioContext scenarioContext;
 
-    @Getter
     private String baseURl;
 
-    @Getter
     private String project;
 
     public BaseStep(TestContext testContext) {
