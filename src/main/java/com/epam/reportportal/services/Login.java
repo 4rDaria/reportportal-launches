@@ -2,23 +2,20 @@ package com.epam.reportportal.services;
 
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.launches.LaunchesPage;
-import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
-import org.springframework.stereotype.Component;
 
-import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.open;
-import static com.epam.reportportal.constants.Constants.PROJECT;
+import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
+import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
 
-@Component
-@NoArgsConstructor
 public class Login {
-    private static final Logger logger = LogManager.getRootLogger();
-    private static final String LOGIN_PAGE_URL = baseUrl + "/ui/#login";
-
+    private static final Logger LOGGER = LogManager.getRootLogger();
+    public static final String BASE_URL = baseUrlForCurrentEnv();
+    public static final String PROJECT = projectNameForCurrentEnv();
+    private static final String LOGIN_PAGE_URL = BASE_URL + "/ui/#login";
     private static void setInputLogin(String username) {
         $(By.name("login")).setValue(username);
     }
@@ -36,9 +33,9 @@ public class Login {
         open(LOGIN_PAGE_URL);
         try {
             open(LOGIN_PAGE_URL);
-            logger.info("Login page opened successfully");
+            LOGGER.info("Login page opened successfully");
         } catch (Exception e) {
-            logger.error("Failed to open login page: " + e.getMessage());
+            LOGGER.error("Failed to open login page: " + e.getMessage());
         }
         return new Login();
     }
@@ -48,8 +45,8 @@ public class Login {
         setInputLogin(user.getUsername());
         setInputPassword(user.getPassword());
         clickLoginButton();
-        logger.info("Login performed");
-        open(baseUrl + "/ui/#" + PROJECT + "/launches/all");
+        LOGGER.info("Login performed");
+        open(BASE_URL + "/ui/#" + PROJECT + "/launches/all");
         return new LaunchesPage();
     }
 }
