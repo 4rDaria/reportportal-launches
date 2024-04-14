@@ -1,5 +1,5 @@
 @ui
-Feature: Verify each launch contains all test count data
+Feature: Each launch contains all test count data
 
   Background:
     Given I am logged in and on the launches page
