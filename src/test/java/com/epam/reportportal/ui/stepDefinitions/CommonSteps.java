@@ -1,6 +1,5 @@
 package com.epam.reportportal.ui.stepDefinitions;
 
-import com.epam.reportportal.cucumber.Context;
 import com.epam.reportportal.cucumber.TestContext;
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.launches.LaunchesPage;
@@ -16,8 +15,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class CommonSteps extends BaseStep {
 
-    //private static LaunchesPage launchesPage;
-
     public CommonSteps(TestContext testContext) {
         super(testContext);
     }
@@ -27,8 +24,6 @@ public class CommonSteps extends BaseStep {
         User testUser = UserCreator.withCredentialsFromProperty();
         openLoginPage();
         getWebDriver().manage().window().maximize();
-       // launchesPage = login(testUser);
-       // launchesPage = login(testUser);
         getScenarioContext().setContext(LAUNCH_PAGE, login(testUser));
     }
 

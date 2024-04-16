@@ -153,6 +153,11 @@
                     <includes>
                         <include>TestRunner.class</include>
                     </includes>
+                    <properties>
+                        <configurationParameters>
+                            cucumber.junit-platform.naming-strategy=long
+                        </configurationParameters>
+                    </properties>
                 </configuration>
             </plugin>
         </plugins>

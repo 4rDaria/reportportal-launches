@@ -14,13 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.epam.reportportal.cucumber.Context.GRID_ROW_ELEMENTS;
-import static com.epam.reportportal.cucumber.Context.LAUNCH_PAGE;
+import static com.epam.reportportal.cucumber.Context.*;
 import static java.util.Arrays.asList;
 
 public class UserIsAbleToSelectSeveralLaunchesAndCompareThemSteps extends BaseStep{
-
-    private List<GridRow> numberLaunchesToCompare;
 
     public UserIsAbleToSelectSeveralLaunchesAndCompareThemSteps(TestContext testContext) {
         super(testContext);
@@ -30,9 +27,9 @@ public class UserIsAbleToSelectSeveralLaunchesAndCompareThemSteps extends BaseSt
     public void i_choose_launches(String launchesToCompare) {
         ElementsCollection gridRowElements = (ElementsCollection) getScenarioContext().getContext(GRID_ROW_ELEMENTS);
         List<Integer> launchesToCompareList = launchesToCompareList(launchesToCompare);
-        numberLaunchesToCompare = new ArrayList<>();
+        List<GridRow> numberLaunchesToCompare = new ArrayList<>();
         launchesToCompareList.forEach(launch -> numberLaunchesToCompare.add(new GridRow(gridRowElements.get(launch))));
-
+        getScenarioContext().setContext(NUMBER_LAUNCHES_TO_COMPARE, numberLaunchesToCompare);
         //select launches
         toggleSelection(numberLaunchesToCompare);
     }
@@ -49,6 +46,7 @@ public class UserIsAbleToSelectSeveralLaunchesAndCompareThemSteps extends BaseSt
     public void compareLaunches() {
         openAndCloseActionMenu();
 
+        List<GridRow> numberLaunchesToCompare = (List<GridRow>) getScenarioContext().getContext(NUMBER_LAUNCHES_TO_COMPARE);
         //unselect launches
         toggleSelection(numberLaunchesToCompare);
     }

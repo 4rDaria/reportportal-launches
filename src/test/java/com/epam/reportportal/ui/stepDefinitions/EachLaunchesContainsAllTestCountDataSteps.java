@@ -19,8 +19,6 @@ import static com.epam.reportportal.cucumber.Context.GRID_ROW_ELEMENTS;
 public class EachLaunchesContainsAllTestCountDataSteps extends BaseStep{
 
     private static final Logger LOGGER = LogManager.getRootLogger();
-   // private static LaunchesPage launchesPage;
-   // private ElementsCollection gridRowElements;
 
     public EachLaunchesContainsAllTestCountDataSteps(TestContext testContext) {
         super(testContext);
@@ -43,9 +41,4 @@ public class EachLaunchesContainsAllTestCountDataSteps extends BaseStep{
             }
         }
     }
-
-//    @After()
-//    public void tearDownForUi() {
-//        WebDriverRunner.closeWebDriver();
-//    }
 }
