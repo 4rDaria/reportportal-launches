@@ -10,9 +10,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class MergeLaunchesRqDto implements Serializable {
     private List<AttributeDto> attributes;
     private String description;

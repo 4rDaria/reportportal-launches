@@ -1,18 +1,16 @@
 package com.epam.reportportal.api.dto.common;
 
 import com.epam.reportportal.api.dto.response.StatisticsDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class LaunchDto implements Serializable {
     private String owner;
     private String description;
