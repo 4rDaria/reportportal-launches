@@ -1,19 +1,15 @@
 package com.epam.reportportal.api;
 
 import com.epam.reportportal.api.dto.common.LaunchDto;
-import com.epam.reportportal.api.dto.request.FilterDto;
 import com.epam.reportportal.api.dto.response.LaunchesDto;
-import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.epam.reportportal.api.RequestBuilder.*;
 import static com.epam.reportportal.api.helper.Routes.*;
@@ -30,11 +26,13 @@ public class LaunchesApiTest {
 
     private static final Logger LOGGER = LogManager.getRootLogger();
 
+    private static final int INCORRECT_LAUNCH_ID = 12;
+
     @BeforeAll
     public static void setUp() {
         setProxyProperties();
 
-        var response = postWithBody(demo_data_generation_url, "{\"createDashboard\": true}");
+        var response = post(demo_data_generation_url, "{\"createDashboard\": true}");
 
         assertEquals(OK.value(), response.statusCode());
         LOGGER.info("Demo data generated successfully");
@@ -55,36 +53,17 @@ public class LaunchesApiTest {
 
     @Test
     public void whenRemoveLaunchByInvalidId_thenReturn404AndValidMessage() {
-        int launchId = 12; //incorrect value
-
-        var responseMessage = deleteWithNotFoundStatusCodeAndResponseMessage(format(delete_launches_url, launchId));
+        var responseMessage = deleteWithNotFoundStatusCodeAndResponseMessage(format(delete_launches_url, INCORRECT_LAUNCH_ID));
         assertNotNull(responseMessage);
 
-        String expectedResponseMessage = format("Launch '%s' not found. Did you use correct Launch ID?", launchId);
+        String expectedResponseMessage = format("Launch '%s' not found. Did you use correct Launch ID?", INCORRECT_LAUNCH_ID);
         assertEquals(expectedResponseMessage, responseMessage);
 
-        LOGGER.info("Launch with id=" + launchId + " not found");
-    }
-
-    public static Stream<Arguments> launchFiltersProvider() {
-        FilterDto filters = createFilters();
-        return Stream.of(
-                Arguments.of("has.attributeKey", filters.getAttributeKey()),
-                Arguments.of("has.attributeValue",  filters.getAttributeValue()),
-                Arguments.of("eq.endTime", filters.getEndTime()),
-                Arguments.of("eq.hasRetries", String.valueOf(filters.isHasRetries())),
-                Arguments.of("eq.id", String.valueOf(filters.getId())),
-                Arguments.of("eq.name", filters.getName()),
-                Arguments.of("eq.number", String.valueOf(filters.getNumber())),
-                Arguments.of("eq.startTime", filters.getStartTime()),
-                Arguments.of("eq.status", filters.getStatus()),
-                Arguments.of("eq.user", filters.getUser()),
-                Arguments.of("eq.uuid", filters.getUuid())
-        );
+        LOGGER.info("Launch with id=" + INCORRECT_LAUNCH_ID + " not found");
     }
 
     @ParameterizedTest(name = "{index} => user is able o get all launches via GET request by filter''{0}''")
-    @MethodSource("launchFiltersProvider")
+    @MethodSource("com.epam.reportportal.api.helper.TestHelper#launchFiltersProvider")
     public void whenGetAllLaunchesByAuthorizedUserAndValidFilter_thenReturn200AndValidResponse(String paramName, String paramValue) {
         var response = getWithOkStatusCodeAndResponse(urlWithFilter(paramName, paramValue), LaunchesDto.class);
         assertThat(response.getContent().size()).isGreaterThanOrEqualTo(1);
@@ -94,9 +73,9 @@ public class LaunchesApiTest {
     }
 
     @ParameterizedTest(name = "{index} => user is able o get all launches via GET request by filter''{0}''")
-    @MethodSource("launchFiltersProvider")
+    @MethodSource("com.epam.reportportal.api.helper.TestHelper#launchFiltersProvider")
     public void whenGetAllLaunchesByAuthorizedUserAndValidFilter_thenReturn401(String paramName, String paramValue) {
-        var response = getWithUnauthorized(urlWithFilter(paramName, paramValue));
+        var response = getForUnauthorized(urlWithFilter(paramName, paramValue));
         assertEquals(UNAUTHORIZED.value(), response.statusCode());
 
         LOGGER.info("All launches by filter " + paramName + " are not received. User unauthorized");
@@ -114,7 +93,7 @@ public class LaunchesApiTest {
         Integer firstLaunchToCompareId = launchIds.get(0);
         Integer secondLaunchToCompareId = launchIds.get(1);
 
-        Response response = getWithQueryParameters(launches_compare_url, firstLaunchToCompareId, secondLaunchToCompareId);
+        var response = getWithQueryParameters(launches_compare_url, firstLaunchToCompareId, secondLaunchToCompareId);
 
         assertEquals(OK.value(), response.statusCode());
 
@@ -129,7 +108,7 @@ public class LaunchesApiTest {
         Integer firstLaunchToCompareId = launchIds.get(0);
         Integer secondLaunchToCompareId = launchIds.get(1);
 
-        Response response = getWithQueryParameters(launches_compare_incorrect_url, firstLaunchToCompareId, secondLaunchToCompareId);
+        var response = getWithQueryParameters(launches_compare_incorrect_url, firstLaunchToCompareId, secondLaunchToCompareId);
 
         assertEquals(NOT_FOUND.value(), response.statusCode());
 
@@ -149,7 +128,7 @@ public class LaunchesApiTest {
 
     @Test
     public void whenMergeLaunchesWithInvalidFieldValues_thenReturn400() {
-        var response = postWithBody(merge_launches_url, createIncorrectMergeLaunchesRQ());
+        var response = post(merge_launches_url, createIncorrectMergeLaunchesRQ());
 
         assertEquals(BAD_REQUEST.value(), response.statusCode());
         LOGGER.info("Launches can't be merged. Bad request");
@@ -157,7 +136,7 @@ public class LaunchesApiTest {
 
     @Test
     public void whenMergeLaunchesWithInvalidHttpMethods_thenReturn405() {
-        var response = putWithBody(merge_launches_url, createMergeLaunchesRQ());
+        var response = put(merge_launches_url, createMergeLaunchesRQ());
 
         assertEquals(METHOD_NOT_ALLOWED.value(), response.statusCode());
         LOGGER.info("Launches can't be merged. Method not allowed");
@@ -175,16 +154,15 @@ public class LaunchesApiTest {
 
     @Test
     public void whenUpdateLaunchByInvalidLaunchId_thenReturn404AndValidMessage() {
-        int launchId = 12; //incorrect value
-        var response = putWithBody(format(update_launch_url, launchId), createUpdateLaunchRQ());
+        var response = put(format(update_launch_url, INCORRECT_LAUNCH_ID), createUpdateLaunchRQ());
 
         assertEquals(NOT_FOUND.value(), response.statusCode());
-        LOGGER.info("Launches can't be updated. Launch id = " + launchId + " not allowed");
+        LOGGER.info("Launches can't be updated. Launch id = " + INCORRECT_LAUNCH_ID + " not allowed");
     }
 
     @Test
     public void whenUpdateLaunchWithInvalidHttpMethods_thenReturn405() {
-        var response = postWithBody(format(update_launch_url, randomLaunchId()), createUpdateLaunchRQ());
+        var response = post(format(update_launch_url, randomLaunchId()), createUpdateLaunchRQ());
 
         assertEquals(METHOD_NOT_ALLOWED.value(), response.statusCode());
         LOGGER.info("Launches can't be updated. Method not allowed");

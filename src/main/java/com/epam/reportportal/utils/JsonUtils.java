@@ -19,5 +19,14 @@ public class JsonUtils {
         }
     }
 
+    public static <T> T jsonToObject(String jsonString, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(jsonString, clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }

@@ -40,18 +40,7 @@ public class RequestBuilder {
                 .as(clazz);
     }
 
-    public static Object getWithNotFoundStatusCodeAndResponseMessage(String url) {
-        return requestSpecificationWithAuth()
-                .get(url)
-                .then()
-                .assertThat()
-                .statusCode(NOT_FOUND.value())
-                .extract()
-                .jsonPath()
-                .get("message");
-    }
-
-    public static Response getWithUnauthorized(String url) {
+    public static Response getForUnauthorized(String url) {
         return incorrectRequestSpecification()
                 .get(url);
     }
@@ -62,13 +51,7 @@ public class RequestBuilder {
                 .queryParam("ids", secondLaunchToCompareId)
                 .get(url);
     }
-
-    public static Response post(String url) {
-        return requestSpecificationWithAuth()
-                .post(url);
-    }
-
-    public static Response postWithBody(String url, String body) {
+    public static Response post(String url, String body) {
         return requestSpecificationWithAuthContentTypeJsonAndBody(body)
                 .post(url);
     }
@@ -82,7 +65,7 @@ public class RequestBuilder {
                 .extract()
                 .as(clazz);
     }
-    public static Response putWithBody(String url, String body) {
+    public static Response put(String url, String body) {
         return requestSpecificationWithAuthContentTypeJsonAndBody(body)
                 .put(url);
     }
