@@ -1,9 +1,6 @@
 package com.epam.reportportal.model.user;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 
 @Data
 public class User {

@@ -1,21 +1,18 @@
 package com.epam.reportportal;
 
-import org.testng.TestNG;
-import java.util.ArrayList;
-import java.util.List;
+import org.junit.platform.launcher.listeners.TestExecutionSummary;
+
+import java.io.PrintWriter;
+
 
 public class TestRunner {
-
     public static void main(String[] args) {
 
-        TestNG testNG = new TestNG();
+        RunJUnit5TestsFromJava runner = new RunJUnit5TestsFromJava();
+        runner.runAll();
 
-        List<String> suiteFiles = new ArrayList<>();
-        suiteFiles.add("src/test/resources/testng.xml");
+        TestExecutionSummary summary = runner.listener.getSummary();
+        summary.printTo(new PrintWriter(System.out));
 
-        testNG.setTestSuites(suiteFiles);
-
-        testNG.run();
     }
-
 }

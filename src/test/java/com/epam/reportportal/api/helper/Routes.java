@@ -1,13 +1,19 @@
 package com.epam.reportportal.api.helper;
 
+import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
+import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
+import static java.lang.String.format;
+
 public class Routes {
 
-    //Routes using for creation and save url for API testing
-    public static String get_all_launches_url = "get_all_launches_url";
-    public static String delete_launches_url = "delete_launches_url";
-    public static String start_launch_url = "start_launch_url";
-    public static String launches_compare_url = "launches_compare_url";
-    public static String force_finish_launch_request_url = "force_finish_launch_request_url";
-    public static String merge_launches_url = "merge_launches_url";
-    public static String demo_data_generation_url = "demo_data_generation_url";
+    private static final String PROJECT = projectNameForCurrentEnv();
+    private static final String API_URL = format("/api/v1/%s/launch", PROJECT);
+    private static final String API_BASE_LAUNCH_URL = baseUrlForCurrentEnv() + API_URL;
+    public static String get_all_launches_url = API_BASE_LAUNCH_URL;
+    public static String delete_launches_url = API_BASE_LAUNCH_URL + "/%s";
+    public static String launches_compare_url = API_BASE_LAUNCH_URL + "/compare";
+    public static String launches_compare_incorrect_url = API_BASE_LAUNCH_URL + "/compares";
+    public static String merge_launches_url = API_BASE_LAUNCH_URL + "/merge";
+    public static String update_launch_url = API_BASE_LAUNCH_URL + "/%s/update";
+    public static String demo_data_generation_url = baseUrlForCurrentEnv() + format("/api/v1/demo/%s/generate", PROJECT);
 }

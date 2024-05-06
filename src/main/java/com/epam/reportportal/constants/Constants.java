@@ -1,8 +1,6 @@
 package com.epam.reportportal.constants;
 
 public class Constants {
-    public static final String PROJECT = "mp_project";
-
     public static final String HAMBURGER_CSS = "hamburger-col";
     public static final String START_TIME_CELL_CSS = "start-time-col";
     public static final String TOTAL_COUNT_CELL_CSS = "total-col";
@@ -21,10 +19,21 @@ public class Constants {
     public static final String PATTERN_ANALYSIS_ACTION = "Pattern analysis";
     public static final String DELETE_ACTION = "Delete";
 
-    public static final String AUTO_BUGS_DONUT_IDENTIFICATOR = "ab";
-    public static final String SYSTEM_ISSUES_DONUT_IDENTIFICATOR = "si";
+    public static final String AUTO_BUG_DONUT_IDENTIFICATOR = "ab";
+    public static final String SYSTEM_ISSUE_DONUT_IDENTIFICATOR = "si";
     public static final String TO_INVESTIGATE_DONUT_IDENTIFICATOR = "ti";
-    public static final String PRODUCT_BUGS_DONUT_IDENTIFICATOR = "pb";
+    public static final String PRODUCT_BUG_DONUT_IDENTIFICATOR = "pb";
+    public static final String NAME_CSS = "//td//div[contains(@class,'itemInfo__name--')]/span";
+
+
+    public static final String TOTAL = "TOTAL";
+    public static final String PASSED = "PASSED";
+    public static final String FAILED = "FAILED";
+    public static final String SKIPPED = "SKIPPED";
+    public static final String PRODUCT_BUG = "PRODUCT_BUG";
+    public static final String AUTO_BUG = "AUTO_BUG";
+    public static final String SYSTEM_ISSUE = "SYSTEM_ISSUE";
+    public static final String TO_INVESTIGATE = "TO_INVESTIGATE";
 
 
 }
