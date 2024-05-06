@@ -1,6 +1,5 @@
 package com.epam.reportportal.utils;
 
-import com.epam.reportportal.model.launches.Launches;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
