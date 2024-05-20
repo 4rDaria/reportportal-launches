@@ -1,32 +1,31 @@
 package com.epam.reportportal.pages.launches;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.epam.reportportal.pages.common.ModalWindow;
 import com.epam.reportportal.pages.common.ElWrapper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import java.util.List;
+
 
 public class HamburgerMenu extends ElWrapper {
 
-    public HamburgerMenu(SelenideElement element) {
+    private WebDriver driver;
+    public HamburgerMenu(WebElement element) {
         super(element);
     }
 
-    public ElementsCollection menuItems() {
-        return $$("getMenuItems");
+    public List<WebElement> menuItems() {
+        return driver.findElements(By.xpath("getMenuItems"));
     }
 
-    public SelenideElement menuItemByAction() {
-        return $("getMenuItemByAction");
+    public WebElement menuItemByAction() {
+        return driver.findElement(By.xpath("getMenuItemByAction"));
     }
 
     public ModalWindow deleteLaunchModal() {
-        return new ModalWindow($("deleteLaunchModal"));
-    }
-
-    public void deleteLaunch() {
-
+        WebElement deleteLaunchModalElement = driver.findElement(By.id("deleteLaunchModal"));
+        return new ModalWindow(deleteLaunchModalElement);
     }
 }
