@@ -4,50 +4,48 @@ import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.launches.LaunchesPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.open;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
 
-public class Login {
+public class Login extends AbstractPage{
     private static final Logger LOGGER = LogManager.getRootLogger();
     public static final String BASE_URL = baseUrlForCurrentEnv();
     public static final String PROJECT = projectNameForCurrentEnv();
     private static final String LOGIN_PAGE_URL = BASE_URL + "/ui/#login";
-    private static void setInputLogin(String username) {
-        $(By.name("login")).setValue(username);
+
+    @FindBy(name = "login")
+    private WebElement loginInput;
+
+    @FindBy(name = "password")
+    private WebElement passwordInput;
+
+    @FindBy(xpath = "//button[contains(text(), 'Login')]")
+    private WebElement loginButton;
+
+    public Login(WebDriver driver) {
+        super(driver);
+        PageFactory.initElements(this.driver, this);
     }
 
-    private static void setInputPassword(String password) {
-        $(By.name("password")).setValue(password);
+    @Override
+    public Login openPage() {
+        driver.navigate().to(LOGIN_PAGE_URL);
+        LOGGER.info("Login page opened successfully");
+        return this;
     }
 
-    private static void clickLoginButton() {
-        $x("//button[contains(text(), 'Login')]").click();
-    }
-
-    public static Login openLoginPage()
-    {
-        open(LOGIN_PAGE_URL);
-        try {
-            open(LOGIN_PAGE_URL);
-            LOGGER.info("Login page opened successfully");
-        } catch (Exception e) {
-            LOGGER.error("Failed to open login page: " + e.getMessage());
-        }
-        return new Login();
-    }
-
-    public static LaunchesPage login(User user)
-    {
-        setInputLogin(user.getUsername());
-        setInputPassword(user.getPassword());
-        clickLoginButton();
+    public LaunchesPage login(User user) {
+        loginInput.sendKeys(user.getUsername());
+        passwordInput.sendKeys(user.getPassword());
+        loginButton.click();
         LOGGER.info("Login performed");
-        open(BASE_URL + "/ui/#" + PROJECT + "/launches/all");
-        return new LaunchesPage();
+        driver.navigate().to(BASE_URL + "/ui/#" + PROJECT + "/launches/all");
+        return new LaunchesPage(driver);
     }
 }
 
