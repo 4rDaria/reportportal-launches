@@ -1,5 +1,7 @@
 package com.epam.reportportal.ui;
 
+import static com.epam.reportportal.constants.Constants.PASSED_COUNT_CELL_CSS;
+import static com.epam.reportportal.constants.Constants.PRODUCT_BUG_DONUT_IDENTIFICATOR;
 import static com.epam.reportportal.services.CheckScreenshotService.imagesAreEqual;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.*;
 import static java.time.Duration.ofSeconds;
@@ -26,11 +28,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,7 +172,6 @@ public class LaunchesPageTest extends BaseTest {
     @Test
     public void checkScreenshot() throws IOException, InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
-
         List<WebElement> gridRowElements = wait.until(presenceOfAllElementsLocatedBy(cssSelector("div[class*='grid-row-wrapper']")));
 
         WebElement launch = gridRowElements.get(0);
@@ -186,4 +189,43 @@ public class LaunchesPageTest extends BaseTest {
 
         Assert.assertTrue(imagesAreEqual(expectedScreenshotLocation, actualScreenshotLocation));
     }
+
+    /*
+    we don't have resizable elements on launch page.
+    following code is only theoretical - step by step what we must do to resize element
+    tests for task
+        1.	Implement Drag & Drop, Elements Resize using Actions.
+        2.	Implement below features using Js executor:
+        a.	Scroll to element
+        b.	Verification if element is scrolled into view
+        c.	Click using JS
+     in AdditionalTest class
+
+    @Test
+    public void resizeElement() throws InterruptedException {
+        List<WebElement> gridRowElements = launchesPage.gridRowElements();
+        GridRow launch = new GridRow(gridRowElements.get(0));
+
+        WebElement resizeableElement = launch.donutElementByType(PRODUCT_BUG_DONUT_IDENTIFICATOR);
+        resize(resizeableElement, 200, 200);
+        Thread.sleep(1000);
+    }
+
+    public void resize(WebElement elementToResize, int xOffset, int yOffset) {
+        try {
+            if (elementToResize.isDisplayed()) {
+                Actions action = new Actions(driver);
+                action.clickAndHold(elementToResize).moveByOffset(xOffset, yOffset).release().build().perform();
+            } else {
+                System.out.println("Element was not displayed to drag");
+            }
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Element with " + elementToResize + "is not attached to the page document "  + e.getStackTrace());
+        } catch (NoSuchElementException e) {
+            System.out.println("Element " + elementToResize + " was not found in DOM " + e.getStackTrace());
+        } catch (Exception e) {
+            System.out.println("Unable to resize" + elementToResize + " - " + e.getStackTrace());
+        }
+    }
+    */
 }
