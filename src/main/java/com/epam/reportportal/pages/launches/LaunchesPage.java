@@ -2,14 +2,16 @@ package com.epam.reportportal.pages.launches;
 
 import com.epam.reportportal.services.AbstractPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
@@ -35,9 +37,21 @@ public class LaunchesPage extends AbstractPage {
     }
 
     public List<WebElement> gridRowElements() {
-        WebElement linkLoggedInUser = new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[class*='grid-row-wrapper']")));
-        return driver.findElements(By.cssSelector("div[class*='grid-row-wrapper']"));
+        Wait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(10))
+                .pollingEvery(Duration.ofMillis(500))
+                .ignoring(NoSuchElementException.class);
+
+        return wait.until(new Function<WebDriver, List<WebElement>>() {
+            public List<WebElement> apply(WebDriver driver) {
+                List<WebElement> elements = driver.findElements(By.cssSelector("div[class*='grid-row-wrapper']"));
+                if (elements.size() > 0) {
+                    return elements;
+                } else {
+                    throw new NoSuchElementException("No elements found with the specified locator.");
+                }
+            }
+        });
     }
 
     public List<WebElement> titles() {
@@ -51,3 +65,4 @@ public class LaunchesPage extends AbstractPage {
         return new ActionMenu(menuElement);
     }
 }
+

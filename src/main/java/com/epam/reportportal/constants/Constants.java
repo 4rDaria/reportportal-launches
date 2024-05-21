@@ -9,7 +9,7 @@ public class Constants {
     public static final String SKIPPED_COUNT_CELL_CSS = "skipped-col";
     public static final String PRODUCT_BUG_COUNT_CELL_CSS = "pb-col";
     public static final String AUTO_BUG_COUNT_CELL_CSS = "ab-col";
-    public static final String SYSTEM_ISSUE_COUNT_CELL_CSS = "sy-col";
+    public static final String SYSTEM_ISSUE_COUNT_CELL_CSS = "si-col";
     public static final String TO_INVESTIGATE_COUNT_CELL_CSS = "ti-col";
 
     public static final String MOVE_TO_DEBUG_ACTION = "Move to debug";

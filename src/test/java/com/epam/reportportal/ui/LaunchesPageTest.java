@@ -2,7 +2,11 @@ package com.epam.reportportal.ui;
 
 import static com.epam.reportportal.services.CheckScreenshotService.imagesAreEqual;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.*;
+import static java.time.Duration.ofSeconds;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.openqa.selenium.By.cssSelector;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllElementsLocatedBy;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.common.ModalWindow;
@@ -22,6 +26,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,12 +45,11 @@ public class LaunchesPageTest extends BaseTest {
 
 
     @BeforeEach
-    public void setUp() throws InterruptedException {
+    public void setUp() {
         User testUser = UserCreator.withCredentialsFromProperty();
         launchesPage = new Login(driver)
                 .openPage()
                 .login(testUser);
-        Thread.sleep(500);
     }
 
     @Test
@@ -60,7 +65,8 @@ public class LaunchesPageTest extends BaseTest {
     @ParameterizedTest(name = "{index} => launch contains tests count data for ''{0}''")
     @MethodSource("com.epam.reportportal.utils.TestDataUtils#category")
     public void eachLaunchesContainsAllTestCountData(String category, String css) throws InterruptedException {
-        List<WebElement> gridRowElements = driver.findElements(By.cssSelector("div[class*='grid-row-wrapper']"));
+        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
+        List<WebElement> gridRowElements = wait.until(visibilityOfAllElements(launchesPage.gridRowElements()));
 
         for (WebElement gridRow : gridRowElements) {
             GridRow launch = new GridRow(gridRow);
@@ -108,7 +114,6 @@ public class LaunchesPageTest extends BaseTest {
     }
 
 
-    //DONE
     @ParameterizedTest(name = "{index} => user is able to move to appropriate launch clicking ''{0}''")
     @MethodSource("com.epam.reportportal.utils.TestDataUtils#donutElement")
     public void userIsAbleToMoveToAppropriateLaunchViaDonutElement(String category, String elementIdentificator) throws InterruptedException {
@@ -121,8 +126,10 @@ public class LaunchesPageTest extends BaseTest {
         if (donutElements == null) {
             LOGGER.info("Can't check moving to appropriate via " + category + " because there is no data in this category");
         } else {
-            launch.donutElementByType(elementIdentificator).click();
-            Thread.sleep(500);
+            WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
+            WebElement element = wait.until(ExpectedConditions.visibilityOf(launch.donutElementByType(elementIdentificator)));
+            element.click();
+
             String expectedUrl = BASE_URL + "/ui/#" + PROJECT + "/launches/all/" + launchId +
                     "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter.in.issueType%3D" +
                     elementIdentificator + "001";
@@ -141,7 +148,9 @@ public class LaunchesPageTest extends BaseTest {
         List<WebElement> gridRowElements = launchesPage.gridRowElements();
         GridRow launch = new GridRow(gridRowElements.get(0));
         String launchId = launch.launchId();
-        WebElement element = launch.categoryCount(elementIdentificator);
+
+        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
+        WebElement element = wait.until(ExpectedConditions.visibilityOf(launch.categoryCount(elementIdentificator)));
 
         if (element == null) {
             LOGGER.info("Can't check moving to appropriate via " + elementIdentificator +
@@ -158,11 +167,12 @@ public class LaunchesPageTest extends BaseTest {
 
     @Test
     public void checkScreenshot() throws IOException, InterruptedException {
-        //Thread.sleep(1000);
-        List<WebElement> gridRowElements = driver.findElements(By.cssSelector("div[class*='grid-row-wrapper']"));
+        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
+
+        List<WebElement> gridRowElements = wait.until(presenceOfAllElementsLocatedBy(cssSelector("div[class*='grid-row-wrapper']")));
+
         WebElement launch = gridRowElements.get(0);
 
-        Thread.sleep(500);
         File elementScreenshot = launch.getScreenshotAs(OutputType.FILE);
 
         //create expected screenshot on-the-fly, simulation early created screenshot using
