@@ -35,8 +35,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllEle
 
 class SauceLabsTest {
     private static final String BROWSER_NAME = browser();
-    public static final String USERNAME = "oauth-manzherovskyi.roma-fd30d";
-    public static final String ACCESS_KEY = "0350c429-dc58-4dcc-bd01-706aa62d6b2c";
+    public static final String USERNAME = "user";
+    public static final String ACCESS_KEY = "key";
     public static final String BROWSER_VERSION = "latest";
     public static final String PLATFORM_NAME = "Windows 11";
     public static final String SAUCE_URL = "https://ondemand.eu-central-1.saucelabs.com/wd/hub";
