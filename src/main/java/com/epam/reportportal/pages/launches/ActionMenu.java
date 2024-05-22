@@ -1,28 +1,40 @@
 package com.epam.reportportal.pages.launches;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.epam.reportportal.pages.common.ModalWindow;
 import com.epam.reportportal.pages.common.ElWrapper;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import java.util.List;
 
 public class ActionMenu extends ElWrapper {
-    public ActionMenu(SelenideElement element) {
+
+    public ActionMenu(WebElement element) {
         super(element);
     }
 
-    public ElementsCollection actionMenuItems() {
-        return $$("actionMenuItems");
+    public List<WebElement> actionMenuItems() {
+        return element.findElements(By.cssSelector("div[class*='menu-item'] > span"));
     }
 
-    public SelenideElement actionMenuItemByAction() {
-        return $("actionMenuItemByAction");
+    public WebElement actionMenuItemByAction(String action) {
+        List<WebElement> menuItems = element.findElements(By.cssSelector("div[class*='menu-item'] > span"));
+
+        for (WebElement menuItem : menuItems) {
+            if (menuItem.getText().equals(action)) {
+                return menuItem;
+            }
+        }
+
+        return null;
     }
 
     public ModalWindow compareLaunchesModal() {
-        return new ModalWindow($("compareLaunchesModal"));
+        WebElement compareButton = actionMenuItemByAction("Compare");
+        compareButton.click();
+
+        WebElement modalElement = element.findElement(By.xpath("//div[contains(@class, 'modalLayout__modal-window')]"));
+        return new ModalWindow(modalElement);
     }
 
 }

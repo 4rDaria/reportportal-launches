@@ -1,19 +1,19 @@
 package com.epam.reportportal.pages.common;
 
-import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.WebElement;
 
 public abstract class ElWrapper{
-    public SelenideElement element;
+    public WebElement element;
 
-    public ElWrapper(SelenideElement element){
+    public ElWrapper(WebElement element) {
         this.element = element;
     }
 
-    public ElWrapper(ElWrapper element){
-        this.element = element.el();
+    public ElWrapper(ElWrapper element) {
+        this.element = element.getWrappedElement();
     }
 
-    public SelenideElement el(){
+    public WebElement getWrappedElement() {
         return element;
     }
 }
