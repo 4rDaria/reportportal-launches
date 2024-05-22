@@ -3,6 +3,7 @@ package com.epam.reportportal.utils.configuration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import static java.lang.String.format;
 

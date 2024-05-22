@@ -13,4 +13,3 @@ public class UserCreator {
                 getProperty(TESTDATA_USER_PASSWORD));
     }
 }
-

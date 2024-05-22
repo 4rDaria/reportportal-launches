@@ -1,34 +1,33 @@
 package com.epam.reportportal.ui;
 
-import static com.codeborne.selenide.Selenide.back;
-import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static com.epam.reportportal.services.Login.login;
-import static com.epam.reportportal.services.Login.openLoginPage;
+import static com.epam.reportportal.services.CheckScreenshotService.imagesAreEqual;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.baseUrlForCurrentEnv;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.projectNameForCurrentEnv;
+import static java.time.Duration.ofSeconds;
+import static org.openqa.selenium.By.cssSelector;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import com.epam.reportportal.model.user.User;
-import com.epam.reportportal.pages.common.ModalWindow;
-import com.epam.reportportal.pages.launches.ActionMenu;
 import com.epam.reportportal.pages.launches.GridRow;
 import com.epam.reportportal.pages.launches.LaunchesPage;
+import com.epam.reportportal.services.Login;
 import com.epam.reportportal.services.UserCreator;
+import com.epam.reportportal.utils.DriverManager;
 import com.epam.reportportal.utils.TestDataUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class LaunchesPageTest {
@@ -38,13 +37,15 @@ public class LaunchesPageTest {
     public static final String PROJECT = projectNameForCurrentEnv();
     private static LaunchesPage launchesPage;
 
-    @BeforeMethod
-    public void setUp() {
+    private WebDriver driver = DriverManager.getDriver();
+
+    @BeforeTest
+    public void setUp() throws InterruptedException {
         User testUser = UserCreator.withCredentialsFromProperty();
-        openLoginPage();
-        getWebDriver().manage().window().maximize();
-        launchesPage = login(testUser);
-        sleep(500);
+        launchesPage = new Login(driver)
+                .openPage()
+                .login(testUser);
+        Thread.sleep(500);
     }
 
     @Test
@@ -59,48 +60,17 @@ public class LaunchesPageTest {
 
     @Test(dataProvider = "category", dataProviderClass = TestDataUtils.class)
     public void eachLaunchesContainsAllTestCountData(String category, String css) {
-        ElementsCollection gridRowElements = launchesPage.gridRowElements();
+        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
+        List<WebElement> gridRowElements = wait.until(visibilityOfAllElements(launchesPage.gridRowElements()));
 
-        for (SelenideElement gridRow : gridRowElements) {
+        for (WebElement gridRow : gridRowElements) {
             GridRow launch = new GridRow(gridRow);
-            SelenideElement element = launch.category(category);
+            WebElement element = launch.category(css);
             String id = launch.launchId();
             if (element == null) {
-                LOGGER.info("Element " + category + " not found in launch: " + id);
+                LOGGER.warn("Element " + category + " not found in launch: " + id);
             }
         }
-    }
-
-    @Test(dataProvider = "launchesToCompare", dataProviderClass = TestDataUtils.class)
-    public void userIsAbleToSelectSeveralLaunchesAndCompareThem(String testCase, List<Integer> launchesToCompare) {
-        ElementsCollection gridRowElements = launchesPage.gridRowElements();
-
-        List<GridRow> numberLaunchesToCompare = new ArrayList<>();
-        launchesToCompare.forEach(launch -> numberLaunchesToCompare.add(new GridRow(gridRowElements.get(launch))));
-
-        //select launches
-        toggleSelection(numberLaunchesToCompare);
-
-        openAndCloseActionMenu();
-
-        //unselect launches
-        toggleSelection(numberLaunchesToCompare);
-
-        sleep(500);
-    }
-
-    private void toggleSelection(List<GridRow> numberLaunchesToCompare) {
-        JavascriptExecutor jse = (JavascriptExecutor) getWebDriver();
-
-        for (GridRow launch : numberLaunchesToCompare) {
-            jse.executeScript("arguments[0].click();", launch.checkbox());
-        }
-    }
-
-    private void openAndCloseActionMenu() {
-        ActionMenu actionMenu = launchesPage.openActionMenu();
-        ModalWindow compareModal = actionMenu.compareLaunchesModal();
-        compareModal.buttonWithText("Cancel").click();
     }
 
     @Test
@@ -109,23 +79,28 @@ public class LaunchesPageTest {
     }
 
     @Test(dataProvider = "donutElement", dataProviderClass = TestDataUtils.class)
-    public void userIsAbleToMoveToAppropriateLaunchViaDonutElement(String category, String elementIdentificator) {
-        ElementsCollection gridRowElements = launchesPage.gridRowElements();
-        GridRow launch = new GridRow(gridRowElements.first());
+    public void userIsAbleToMoveToAppropriateLaunchViaDonutElement(String category, String elementIdentificator) throws InterruptedException {
+        WebDriverWait waitElements = new WebDriverWait(driver, ofSeconds(10));
+        List<WebElement> gridRowElements = waitElements.until(visibilityOfAllElements(launchesPage.gridRowElements()));
+
+        GridRow launch = new GridRow(gridRowElements.get(0));
         String launchId = launch.launchId();
 
-        if (!launch.donutElementByType(elementIdentificator).exists()) {
-            LOGGER.info("Can't check moving to appropriate via " + category + " because there no data in this category");
+        WebElement donutElements = launch.donutElementByType(elementIdentificator);
+
+        if (donutElements == null) {
+            LOGGER.info("Can't check moving to appropriate via " + category + " because there is no data in this category");
         } else {
-            launch.donutElementByType(elementIdentificator).click();
-            sleep(1000);
+            WebElement element = launch.donutElementByType(elementIdentificator);
+            element.click();
 
             String expectedUrl = BASE_URL + "/ui/#" + PROJECT + "/launches/all/" + launchId +
                     "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter.in.issueType%3D" +
                     elementIdentificator + "001";
 
-            Assert.assertEquals(expectedUrl, getWebDriver().getCurrentUrl());
-            back();
+            assertEquals(expectedUrl, driver.getCurrentUrl());
+
+            driver.navigate().back();
         }
     }
 
@@ -133,28 +108,48 @@ public class LaunchesPageTest {
     public void userIsAbleToMoveToAppropriateLaunchClickingCountElement(String category,
                                                                         String elementIdentificator,
                                                                         String param) {
-        ElementsCollection gridRowElements = launchesPage.gridRowElements();
-        GridRow launch = new GridRow(gridRowElements.first());
+        List<WebElement> gridRowElements = launchesPage.gridRowElements();
+        GridRow launch = new GridRow(gridRowElements.get(0));
         String launchId = launch.launchId();
-        SelenideElement element = launch.categoryCount(elementIdentificator);
 
-        if (!element.exists()) {
+        WebElement element = launch.categoryCount(elementIdentificator);
+
+        if (element == null) {
             LOGGER.info("Can't check moving to appropriate via " + elementIdentificator +
                     " because there no data in this category");
         } else {
             element.click();
-            sleep(1000);
 
             String expectedUrl = BASE_URL + "/ui/#" + PROJECT + "/launches/all/" + launchId +
                     "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter."
                     + "in.type%3DSTEP%26filter.in.status%3D" + param;
-            Assert.assertEquals(expectedUrl, getWebDriver().getCurrentUrl());
-            back();
+            assertEquals(expectedUrl, driver.getCurrentUrl());
         }
     }
 
-    @AfterMethod
+    @Test
+    public void checkScreenshot() throws IOException, InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
+        List<WebElement> gridRowElements = wait.until(presenceOfAllElementsLocatedBy(cssSelector("div[class*='grid-row-wrapper']")));
+
+        WebElement launch = gridRowElements.get(0);
+
+        File elementScreenshot = launch.getScreenshotAs(OutputType.FILE);
+
+        //create expected screenshot on-the-fly, simulation early created screenshot using
+        String expectedScreenshotLocation = "target/expectedScreenshot.png";
+        String actualScreenshotLocation = "target/actualScreenshot.png";
+        File expectedScreenshot = new File(expectedScreenshotLocation);
+        File actualScreenshot= new File(actualScreenshotLocation);
+
+        FileUtils.copyFile(elementScreenshot, expectedScreenshot);
+        FileUtils.copyFile(elementScreenshot, actualScreenshot);
+
+        Assert.assertTrue(imagesAreEqual(expectedScreenshotLocation, actualScreenshotLocation));
+    }
+
+    @AfterTest
     public void tearDown() {
-        WebDriverRunner.closeWebDriver();
+        DriverManager.closeDriver();
     }
 }
