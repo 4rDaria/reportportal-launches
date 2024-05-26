@@ -18,21 +18,23 @@ public class GridRow extends ElWrapper {
     }
 
     public String launchId() {
-        return element.getAttribute("data-id");
+        return getAttributeByName("data-id");
     }
 
     public WebElement category(String category) {
-        return element.findElement(By.cssSelector("div[class*='" + category + "']"));
+        return findElementByLocator(By.cssSelector("div[class*='" + category + "']"));
     }
 
     public WebElement categoryCount(String category) {
-        try {
-            WebElement categoryElement = category(category);
-            WebElement divElement = categoryElement.findElement(By.tagName("div"));
-            return divElement.findElement(By.tagName("a"));
-        }  catch (NoSuchElementException e) {
-            return null;
+        WebElement categoryCountElement;
+        WebElement categoryElement = category(category);
+        WebElement divElement = categoryElement.findElement(By.tagName("div"));
+        if (divElement.isEnabled()) {
+            categoryCountElement = divElement.findElement(By.tagName("a"));
+        } else {
+            categoryCountElement = null;
         }
+        return categoryCountElement;
     }
 
     public String startTime() {
@@ -44,20 +46,23 @@ public class GridRow extends ElWrapper {
     }
 
     public WebElement checkbox() {
-        return element.findElement(By.cssSelector("input[type='checkbox']"));
+        return findElementByLocator(By.cssSelector("input[type='checkbox']"));
     }
 
     public HamburgerMenu hamburgerMenu() {
-        WebDriver driver = DriverManager.getDriver();
-        element.findElement(By.cssSelector("div[class*='hamburger-icon--']")).click();
-        WebElement hamburgerMenuActions = driver.findElement(By.cssSelector("div[class*='hamburger-menu-actions']"));
+        clickHamburgerMenu();
+        WebElement hamburgerMenuActions = findAnotherElement(By.cssSelector("div[class*='hamburger-menu-actions']"));
         return new HamburgerMenu(hamburgerMenuActions);
+    }
+
+    private void clickHamburgerMenu() {
+        findElementByLocator(By.cssSelector("div[class*='hamburger-icon--']")).click();
     }
 
     public WebElement donutElementByType(String type) {
         try {
             String xpath = String.format(".//div[contains(@class,'launchSuiteGrid__%s')]//*[@class='donut']", type);
-            WebElement donutElement = element.findElement(By.xpath(xpath));
+            WebElement donutElement = findElementByLocator(By.xpath(xpath));
             return donutElement;
         } catch (NoSuchElementException e) {
             return null;

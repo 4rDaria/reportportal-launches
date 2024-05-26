@@ -2,6 +2,7 @@ package com.epam.reportportal.services;
 
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.launches.LaunchesPage;
+import com.epam.reportportal.utils.DriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
