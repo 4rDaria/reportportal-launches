@@ -17,8 +17,8 @@ import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration
 
 public class LaunchesPage extends AbstractPage {
 
-    public static final String BASE_URL = baseUrlForCurrentEnv();
-    public static final String PROJECT = projectNameForCurrentEnv();
+    private static final String BASE_URL = baseUrlForCurrentEnv();
+    private static final String PROJECT = projectNameForCurrentEnv();
     protected final int WAIT_TIMEOUT_SECONDS = 5;
 
 
