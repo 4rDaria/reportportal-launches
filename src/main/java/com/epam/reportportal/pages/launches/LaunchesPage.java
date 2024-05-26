@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -26,7 +25,6 @@ public class LaunchesPage extends AbstractPage {
     public LaunchesPage(WebDriver driver)
     {
         super(driver);
-        PageFactory.initElements(this.driver, this);
     }
 
     @Override
