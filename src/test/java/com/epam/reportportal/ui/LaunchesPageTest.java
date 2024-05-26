@@ -179,7 +179,7 @@ public class LaunchesPageTest extends BaseTest {
         File elementScreenshot = launch.getScreenshotAs(OutputType.FILE);
 
         //create expected screenshot on-the-fly, simulation early created screenshot using
-        String expectedScreenshotLocation = "target/expectedScreenshot.png";
+        String expectedScreenshotLocation = "resources/expectedScreenshot.png";
         String actualScreenshotLocation = "target/actualScreenshot.png";
         File expectedScreenshot = new File(expectedScreenshotLocation);
         File actualScreenshot= new File(actualScreenshotLocation);
