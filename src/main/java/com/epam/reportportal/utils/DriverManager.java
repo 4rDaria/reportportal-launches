@@ -30,6 +30,8 @@ public class DriverManager {
 
     private static WebDriver driver;
 
+    private DriverManager() {}
+
     public static WebDriver getDriver() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -40,7 +42,6 @@ public class DriverManager {
 
     public static void closeDriver() {
         driver.quit();
-        driver = null;
     }
 
     public static RemoteWebDriver sauceLabsTestSetUp() throws MalformedURLException {
