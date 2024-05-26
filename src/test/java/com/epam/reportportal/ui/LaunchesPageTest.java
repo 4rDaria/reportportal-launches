@@ -1,14 +1,8 @@
 package com.epam.reportportal.ui;
 
-import static com.epam.reportportal.constants.Constants.PASSED_COUNT_CELL_CSS;
-import static com.epam.reportportal.constants.Constants.PRODUCT_BUG_DONUT_IDENTIFICATOR;
 import static com.epam.reportportal.services.CheckScreenshotService.imagesAreEqual;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.*;
-import static java.time.Duration.ofSeconds;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.openqa.selenium.By.cssSelector;
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllElementsLocatedBy;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.common.ModalWindow;
@@ -28,13 +22,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,13 +37,12 @@ public class LaunchesPageTest extends BaseTest {
 
     private final WebDriver driver = DriverManager.getDriver();
 
-
     @BeforeEach
     public void setUp() {
         User testUser = UserCreator.withCredentialsFromProperty();
         launchesPage = new Login(driver)
-                .openPage()
-                .login(testUser);
+            .openPage()
+            .login(testUser);
     }
 
     @Test
@@ -68,27 +57,29 @@ public class LaunchesPageTest extends BaseTest {
 
     @ParameterizedTest(name = "{index} => launch contains tests count data for ''{0}''")
     @MethodSource("com.epam.reportportal.utils.TestDataUtils#category")
-    public void eachLaunchesContainsAllTestCountData(String category, String css) throws InterruptedException {
-        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
-        List<WebElement> gridRowElements = wait.until(visibilityOfAllElements(launchesPage.gridRowElements()));
+    public void eachLaunchesContainsAllTestCountData(String category, String css) {
+        boolean eachLaunchesContainsAllTestCountData = true;
 
-        for (WebElement gridRow : gridRowElements) {
+        for (WebElement gridRow : launchesPage.gridRowElements()) {
             GridRow launch = new GridRow(gridRow);
-            WebElement element = launch.category(css);
+
             String id = launch.launchId();
-            if (element == null) {
+            if ( launch.category(css) == null) {
+                eachLaunchesContainsAllTestCountData = false;
                 LOGGER.warn("Element " + category + " not found in launch: " + id);
             }
         }
+        assertTrue(eachLaunchesContainsAllTestCountData);
+
     }
 
     @ParameterizedTest(name = "{index} => user is able select ''{0}'' launches and compare")
     @MethodSource("com.epam.reportportal.utils.TestDataUtils#launchesToCompare")
-    public void userIsAbleToSelectSeveralLaunchesAndCompareThem(String testCase, List<Integer> launchesToCompare) throws InterruptedException {
-        List<WebElement> gridRowElements = launchesPage.gridRowElements();
+    public void userIsAbleToSelectSeveralLaunchesAndCompareThem(String testCase, List<Integer> launchesToCompare)
+        throws InterruptedException {
 
         List<GridRow> numberLaunchesToCompare = new ArrayList<>();
-        launchesToCompare.forEach(launch -> numberLaunchesToCompare.add(new GridRow(gridRowElements.get(launch))));
+        launchesToCompare.forEach(launch -> numberLaunchesToCompare.add(new GridRow(launchesPage.gridRowElements().get(launch))));
 
         //select launches
         toggleSelection(numberLaunchesToCompare);
@@ -117,22 +108,16 @@ public class LaunchesPageTest extends BaseTest {
         assertTrue(true);
     }
 
-
     @ParameterizedTest(name = "{index} => user is able to move to appropriate launch clicking ''{0}''")
     @MethodSource("com.epam.reportportal.utils.TestDataUtils#donutElement")
-    public void userIsAbleToMoveToAppropriateLaunchViaDonutElement(String category, String elementIdentificator) throws InterruptedException {
-        List<WebElement> gridRowElements = launchesPage.gridRowElements();
-        GridRow launch = new GridRow(gridRowElements.get(0));
+    public void userIsAbleToMoveToAppropriateLaunchViaDonutElement(String category, String elementIdentificator) {
+        GridRow launch = new GridRow(launchesPage.gridRowElements().get(0));
         String launchId = launch.launchId();
 
-        WebElement donutElements = launch.donutElementByType(elementIdentificator);
-
-        if (donutElements == null) {
+        if (launch.donutElementByType(elementIdentificator) == null) {
             LOGGER.info("Can't check moving to appropriate via " + category + " because there is no data in this category");
         } else {
-            WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
-            WebElement element = wait.until(ExpectedConditions.visibilityOf(launch.donutElementByType(elementIdentificator)));
-            element.click();
+            launch.donutElementByType(elementIdentificator).click();
 
             String expectedUrl = BASE_URL + "/ui/#" + PROJECT + "/launches/all/" + launchId +
                     "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter.in.issueType%3D" +
@@ -149,40 +134,31 @@ public class LaunchesPageTest extends BaseTest {
     public void userIsAbleToMoveToAppropriateLaunchClickingCountElement(String category,
                                                                         String elementIdentificator,
                                                                         String param) {
-        List<WebElement> gridRowElements = launchesPage.gridRowElements();
-        GridRow launch = new GridRow(gridRowElements.get(0));
+        GridRow launch = new GridRow(launchesPage.gridRowElements().get(0));
         String launchId = launch.launchId();
 
-        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
-        WebElement element = wait.until(ExpectedConditions.visibilityOf(launch.categoryCount(elementIdentificator)));
-
-        if (element == null) {
+        if (launch.categoryCount(elementIdentificator) == null) {
             LOGGER.info("Can't check moving to appropriate via " + elementIdentificator +
-                    " because there no data in this category");
+                " because there no data in this category");
         } else {
-            element.click();
+            launch.categoryCount(elementIdentificator).click();
 
             String expectedUrl = BASE_URL + "/ui/#" + PROJECT + "/launches/all/" + launchId +
-                    "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter."
-                    + "in.type%3DSTEP%26filter.in.status%3D" + param;
+                "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter."
+                + "in.type%3DSTEP%26filter.in.status%3D" + param;
             Assert.assertEquals(expectedUrl, driver.getCurrentUrl());
         }
     }
 
     @Test
     public void checkScreenshot() throws IOException, InterruptedException {
-        WebDriverWait wait = new WebDriverWait(driver, ofSeconds(10));
-        List<WebElement> gridRowElements = wait.until(presenceOfAllElementsLocatedBy(cssSelector("div[class*='grid-row-wrapper']")));
-
-        WebElement launch = gridRowElements.get(0);
-
-        File elementScreenshot = launch.getScreenshotAs(OutputType.FILE);
+        File elementScreenshot = launchesPage.gridRowElements().get(0).getScreenshotAs(OutputType.FILE);
 
         //create expected screenshot on-the-fly, simulation early created screenshot using
         String expectedScreenshotLocation = "resources/expectedScreenshot.png";
         String actualScreenshotLocation = "target/actualScreenshot.png";
         File expectedScreenshot = new File(expectedScreenshotLocation);
-        File actualScreenshot= new File(actualScreenshotLocation);
+        File actualScreenshot = new File(actualScreenshotLocation);
 
         FileUtils.copyFile(elementScreenshot, expectedScreenshot);
         FileUtils.copyFile(elementScreenshot, actualScreenshot);
