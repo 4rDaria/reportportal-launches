@@ -23,6 +23,15 @@ public class TestDataUtils {
         );
     }
 
+    private static Stream<Arguments> categoryWithTitle() {
+        return Stream.of(
+            Arguments.of(TOTAL_COUNT_CELL_CSS, TOTAL),
+            Arguments.of(PASSED_COUNT_CELL_CSS, PASSED),
+            Arguments.of(FAILED_COUNT_CELL_CSS, FAILED),
+            Arguments.of(SKIPPED_COUNT_CELL_CSS, SKIPPED)
+        );
+    }
+
     public static Stream<Arguments> launchesToCompare() {
         return Stream.of(
                 Arguments.of("two in a row", asList(1, 2)),

@@ -1,20 +1,27 @@
 package com.epam.reportportal.ui;
 
 import static com.epam.reportportal.services.CheckScreenshotService.imagesAreEqual;
+import static com.epam.reportportal.utils.DateTimeUtils.descendingSortDateTimeStringFormat;
 import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.common.ModalWindow;
 import com.epam.reportportal.pages.launches.ActionMenu;
 import com.epam.reportportal.pages.launches.GridRow;
+import com.epam.reportportal.pages.launches.HamburgerMenu;
 import com.epam.reportportal.pages.launches.LaunchesPage;
 import com.epam.reportportal.services.Login;
 import com.epam.reportportal.services.UserCreator;
+import com.epam.reportportal.ui.helper.Titles;
+import com.epam.reportportal.utils.DateTimeUtils;
 import com.epam.reportportal.utils.DriverManager;
+import java.util.Collections;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Order;
 import org.openqa.selenium.*;
 
 import org.junit.Assert;
@@ -46,13 +53,52 @@ public class LaunchesPageTest extends BaseTest {
     }
 
     @Test
+    @Order(1)
     public void launchesListSortedByMostRecentByDefault() {
-        assertTrue(true);
+        List<String> actualStartedTimes = getLaunchesStartTime(launchesPage.gridRowElements());
+
+        List<String> expectedStartedTimes = descendingSortDateTimeStringFormat(getLaunchesStartTime(launchesPage.gridRowElements()));
+
+        assertEquals(expectedStartedTimes, actualStartedTimes);
     }
 
-    @Test
-    public void userCanResortLaunchesByEachCategoriesCount() {
-        assertTrue(true);
+    private List<String> getLaunchesStartTime(List<WebElement> gridRowElements) {
+        List<String> startTimes = new ArrayList<>();
+
+        for (WebElement gridRow : gridRowElements) {
+            GridRow launch = new GridRow(gridRow);
+            startTimes.add(launch.getStartTime());
+        }
+        return startTimes;
+    }
+
+    @ParameterizedTest(name = "{index} => user can resort launches via =''{0}''")
+    @MethodSource("com.epam.reportportal.utils.TestDataUtils#categoryWithTitle")
+    public void userCanResortLaunchesByEachCategoriesCount(String category, Titles title) {
+        List<Integer> counts = countsByCategory(launchesPage.gridRowElements(), category);
+
+        launchesPage.titles().get(title.getValue()).click();
+
+        Collections.sort(counts);
+
+        List<Integer> orderedCounts = countsByCategory(launchesPage.gridRowElements(), category);
+
+        Assert.assertTrue(counts.equals(orderedCounts));
+    }
+
+    private List<Integer> countsByCategory(List<WebElement> gridRowElements, String category) {
+        List<Integer> counts = new ArrayList<>();
+        for (WebElement gridRow : gridRowElements) {
+            GridRow launch = new GridRow(gridRow);
+            WebElement element = launch.categoryCount(category);
+
+            if (launch.categoryCount(category) == null) {
+                counts.add(0);
+            } else {
+                counts.add(Integer.parseInt(element.getText()));
+            }
+        }
+        return counts;
     }
 
     @ParameterizedTest(name = "{index} => launch contains tests count data for ''{0}''")
@@ -104,8 +150,20 @@ public class LaunchesPageTest extends BaseTest {
     }
 
     @Test
-    public void userIsAbleToRemoveLaunches() {
-        assertTrue(true);
+    public void userIsAbleToRemoveLaunches() throws InterruptedException {
+        if (launchesPage.gridRowElements().isEmpty()) {
+            LOGGER.info("Test userIsAbleToRemoveLaunches was skipped because launches count is 0 and nothing to delete");
+        } else {
+            GridRow launchToRemove = new GridRow(launchesPage.gridRowElements().get(0));
+            int expectedLaunchsCountAfterDelete = launchesPage.gridRowElements().size() - 1;
+            String deletedLaunchId = launchToRemove.launchId();
+
+            launchToRemove.hamburgerMenu().deleteLaunch(driver);
+
+            LOGGER.info("Launch with id" + deletedLaunchId + " was successfully deleted");
+            int actualLaunchesCount = launchesPage.gridRowElements().size();
+            Assert.assertEquals(expectedLaunchsCountAfterDelete, actualLaunchesCount);
+        }
     }
 
     @ParameterizedTest(name = "{index} => user is able to move to appropriate launch clicking ''{0}''")
@@ -123,7 +181,7 @@ public class LaunchesPageTest extends BaseTest {
                     "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter.in.issueType%3D" +
                     elementIdentificator + "001";
 
-            Assert.assertEquals(expectedUrl, driver.getCurrentUrl());
+            assertEquals(expectedUrl, driver.getCurrentUrl());
 
             driver.navigate().back();
         }
@@ -146,7 +204,7 @@ public class LaunchesPageTest extends BaseTest {
             String expectedUrl = BASE_URL + "/ui/#" + PROJECT + "/launches/all/" + launchId +
                 "?item0Params=filter.eq.hasStats%3Dtrue%26filter.eq.hasChildren%3Dfalse%26filter."
                 + "in.type%3DSTEP%26filter.in.status%3D" + param;
-            Assert.assertEquals(expectedUrl, driver.getCurrentUrl());
+            assertEquals(expectedUrl, driver.getCurrentUrl());
         }
     }
 

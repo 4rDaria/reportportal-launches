@@ -1,10 +1,8 @@
 package com.epam.reportportal.pages.launches;
 
 import com.epam.reportportal.pages.common.ElWrapper;
-import com.epam.reportportal.utils.DriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -29,7 +27,8 @@ public class GridRow extends ElWrapper {
         WebElement categoryCountElement;
         WebElement categoryElement = category(category);
         WebElement divElement = categoryElement.findElement(By.tagName("div"));
-        if (divElement.isEnabled()) {
+        List<WebElement> countElement = divElement.findElements(By.tagName("a"));
+        if (!countElement.isEmpty()) {
             categoryCountElement = divElement.findElement(By.tagName("a"));
         } else {
             categoryCountElement = null;
@@ -37,12 +36,12 @@ public class GridRow extends ElWrapper {
         return categoryCountElement;
     }
 
-    public String startTime() {
+    public String getStartTime() {
         WebElement categoryElement = category(START_TIME_CELL_CSS);
         WebElement divElement = categoryElement.findElement(By.tagName("div"));
         List<WebElement> spanElements = divElement.findElements(By.tagName("span"));
         WebElement lastSpanElement = spanElements.get(spanElements.size() - 1);
-        return lastSpanElement.getText();
+        return lastSpanElement.getAttribute("innerText");
     }
 
     public WebElement checkbox() {
@@ -51,11 +50,11 @@ public class GridRow extends ElWrapper {
 
     public HamburgerMenu hamburgerMenu() {
         clickHamburgerMenu();
-        WebElement hamburgerMenuActions = findAnotherElement(By.cssSelector("div[class*='hamburger-menu-actions']"));
-        return new HamburgerMenu(hamburgerMenuActions);
+
+        return new HamburgerMenu(findElementByLocator(By.cssSelector("div[class*='hamburger-menu-actions']")));
     }
 
-    private void clickHamburgerMenu() {
+    public void clickHamburgerMenu() {
         findElementByLocator(By.cssSelector("div[class*='hamburger-icon--']")).click();
     }
 
