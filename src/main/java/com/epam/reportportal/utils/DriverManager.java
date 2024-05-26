@@ -28,6 +28,7 @@ public class DriverManager {
     public static final String SAUCE_URL = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub";
     public static final String TEST_NAME = "SauceLabsTest";
 
+    private static DriverManager instance;
     private static WebDriver driver;
 
     private DriverManager() {}
@@ -38,6 +39,13 @@ public class DriverManager {
 
         driver.manage().window().maximize();
         return driver;
+    }
+
+    public static synchronized DriverManager getInstance() {
+        if (instance == null) {
+            instance = new DriverManager();
+        }
+        return instance;
     }
 
     public static void closeDriver() {

@@ -42,7 +42,7 @@ public class LaunchesPageTest extends BaseTest {
     public static final String PROJECT = projectNameForCurrentEnv();
     private static LaunchesPage launchesPage;
 
-    private final WebDriver driver = DriverManager.getDriver();
+    private final WebDriver driver = DriverManager.getInstance().getDriver();
 
     @BeforeEach
     public void setUp() {

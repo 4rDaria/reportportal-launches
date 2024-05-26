@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AdditionalTest {
 
-    private final WebDriver driver = DriverManager.getDriver();
+    private final WebDriver driver = DriverManager.getInstance().getDriver();
 
     @Test
     public void resizeElement() throws InterruptedException {

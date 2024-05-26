@@ -24,7 +24,7 @@ public abstract class ElWrapper{
     }
 
     public WebElement findAnotherElement(By locator){
-        return DriverManager.getDriver().findElement(locator);
+        return DriverManager.getInstance().getDriver().findElement(locator);
     }
 
     public String getAttributeByName(String name) {
