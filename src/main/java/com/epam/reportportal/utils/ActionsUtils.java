@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -30,8 +29,6 @@ public class ActionsUtils {
             } else {
                 LOGGER.warn("Element was not displayed to drag");
             }
-        } catch (StaleElementReferenceException e) {
-            LOGGER.info("Element with " + element + "is not attached to the page document "  + e.getStackTrace());
         } catch (NoSuchElementException e) {
             LOGGER.warn("Element " + element + " was not found in DOM " + e.getStackTrace());
         } catch (Exception e) {
