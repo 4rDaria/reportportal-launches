@@ -1,16 +1,17 @@
 package com.epam.reportportal.pages.common;
 
-import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import static java.lang.String.format;
 
 public class ModalWindow extends ElWrapper {
-    public ModalWindow(SelenideElement element) {
+    public ModalWindow(WebElement element) {
         super(element);
     }
 
-    public SelenideElement buttonWithText(String buttonText) {
-        return element.$x(format(".//button[contains(text(),'%s')]/..", buttonText));
+    public WebElement buttonWithText(String buttonText) {
+        return element.findElement(By.xpath(String.format(".//button[contains(text(),'%s')]/..", buttonText)));
     }
 
 }
