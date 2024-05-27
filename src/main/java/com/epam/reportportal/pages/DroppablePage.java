@@ -36,4 +36,10 @@ public class DroppablePage extends AbstractPage {
         LOGGER.info("Page opened successfully");
         return this;
     }
+
+    public DroppablePage openPageAndSwitchToFrame() {
+        openPage();
+        driver.switchTo().frame(0);
+        return this;
+    }
 }

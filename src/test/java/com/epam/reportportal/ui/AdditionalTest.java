@@ -30,7 +30,7 @@ public class AdditionalTest {
     @Test
     public void dragAndDrop() throws InterruptedException {
         DroppablePage page = new DroppablePage(driver)
-            .openPage();
+            .openPageAndSwitchToFrame();
 
         ActionsUtils.dragAndDrop(driver, page.getDraggableElement(), page.getDroppableElement());
 
