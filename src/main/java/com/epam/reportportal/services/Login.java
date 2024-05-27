@@ -15,8 +15,8 @@ import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration
 
 public class Login extends AbstractPage{
     private static final Logger LOGGER = LogManager.getRootLogger();
-    public static final String BASE_URL = baseUrlForCurrentEnv();
-    public static final String PROJECT = projectNameForCurrentEnv();
+    private static final String BASE_URL = baseUrlForCurrentEnv();
+    private static final String PROJECT = projectNameForCurrentEnv();
     private static final String LOGIN_PAGE_URL = BASE_URL + "/ui/#login";
 
     @FindBy(name = "login")

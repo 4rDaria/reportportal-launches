@@ -38,8 +38,8 @@ import java.util.List;
 public class LaunchesPageTest extends BaseTest {
 
     private static final Logger LOGGER = LogManager.getRootLogger();
-    public static final String BASE_URL = baseUrlForCurrentEnv();
-    public static final String PROJECT = projectNameForCurrentEnv();
+    private static final String BASE_URL = baseUrlForCurrentEnv();
+    private static final String PROJECT = projectNameForCurrentEnv();
     private static LaunchesPage launchesPage;
 
     private final WebDriver driver = DriverManager.getInstance().getDriver();

@@ -11,7 +11,7 @@ import org.openqa.selenium.interactions.Actions;
 public class ActionsUtils {
 
     private static final Logger LOGGER = LogManager.getRootLogger();
-     private WebDriver driver = DriverManager.getInstance().getDriver();
+    private WebDriver driver = DriverManager.getInstance().getDriver();
 
     public static void dragAndDrop(WebDriver driver, WebElement from, WebElement to) {
         Actions action = new Actions(driver);

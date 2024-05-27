@@ -21,12 +21,12 @@ import org.openqa.selenium.safari.SafariOptions;
 public class DriverManager {
 
     private static final String BROWSER_NAME = browser();
-    public static final String USERNAME = "test";
-    public static final String ACCESS_KEY = "test";
-    public static final String BROWSER_VERSION = "latest";
-    public static final String PLATFORM_NAME = "Windows 11";
-    public static final String SAUCE_URL = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub";
-    public static final String TEST_NAME = "SauceLabsTest";
+    private static final String USERNAME = "test";
+    private static final String ACCESS_KEY = "test";
+    private static final String BROWSER_VERSION = "latest";
+    private static final String PLATFORM_NAME = "Windows 11";
+    private static final String SAUCE_URL = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub";
+    private static final String TEST_NAME = "SauceLabsTest";
 
     private static DriverManager instance;
     private static WebDriver driver;
