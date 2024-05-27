@@ -1,10 +1,12 @@
 package com.epam.reportportal.ui;
 
+import com.epam.reportportal.pages.DroppablePage;
+import com.epam.reportportal.pages.ResizablePage;
+import com.epam.reportportal.utils.ActionsUtils;
 import com.epam.reportportal.utils.DriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,86 +18,44 @@ public class AdditionalTest {
 
     @Test
     public void resizeElement() throws InterruptedException {
-        driver.get("https://jqueryui.com/resizable/");
-        driver.switchTo().frame(0);
+        ResizablePage page = new ResizablePage(driver)
+            .openPage();
 
-        WebElement resizeableElement = driver.findElement(By.xpath("//div[contains(@class,'ui-resizable-se')]"));
-        resize(resizeableElement, 200, 200);
+        ActionsUtils.resizeElement(driver, page.getResizeableElement(), 200, 200);
+
+        //we can check if element resize or add another checking according to future task
         Thread.sleep(1000);
-    }
-
-    public void resize(WebElement elementToResize, int xOffset, int yOffset) {
-        try {
-            if (elementToResize.isDisplayed()) {
-                Actions action = new Actions(driver);
-                action.clickAndHold(elementToResize).moveByOffset(xOffset, yOffset).release().build().perform();
-            } else {
-                System.out.println("Element was not displayed to drag");
-            }
-        } catch (StaleElementReferenceException e) {
-            System.out.println("Element with " + elementToResize + "is not attached to the page document "  + e.getStackTrace());
-        } catch (NoSuchElementException e) {
-            System.out.println("Element " + elementToResize + " was not found in DOM " + e.getStackTrace());
-        } catch (Exception e) {
-            System.out.println("Unable to resize" + elementToResize + " - " + e.getStackTrace());
-        }
     }
 
     @Test
     public void dragAndDrop() throws InterruptedException {
-        driver.get("https://jqueryui.com/droppable/");
-        driver.switchTo().frame(0);
+        DroppablePage page = new DroppablePage(driver)
+            .openPage();
 
-        WebElement draggable = driver.findElement(By.id("draggable"));
-        WebElement droppable = driver.findElement(By.id("droppable"));
-        dragAndDropAction(draggable, droppable);
-        Thread.sleep(1000);
-    }
+        ActionsUtils.dragAndDrop(driver, page.getDraggableElement(), page.getDroppableElement());
 
-    public void dragAndDropAction(WebElement from, WebElement to) {
-        Actions action = new Actions(driver);
-        action.dragAndDrop(from,to).perform();
-    }
-
-    @Test
-    public void testScrollToElementAndVerifyPresence() throws InterruptedException {
-        driver.get("https://jqueryui.com/droppable/");
-        WebElement widgetFactoryElement = driver.findElement(By.xpath("//*[text()='Widget Factory']"));
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", widgetFactoryElement);
-
-        assertTrue(widgetFactoryElement.isDisplayed(), "The element with text 'Widget Factory' should be visible on the page.");
+        //we can check if element resize or add another checking according to future task
         Thread.sleep(1000);
     }
 
     @Test
-    public void scrollToElementAndVerifyPresence() {
-        driver.get("https://jqueryui.com/droppable/");
-        WebElement widgetFactoryElement = driver.findElement(By.xpath("//*[text()='Widget Factory']"));
+    public void scrollToElementAndVerifyPresence() throws InterruptedException {
+        DroppablePage page = new DroppablePage(driver)
+            .openPage();
 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", widgetFactoryElement);
+        ActionsUtils.scrollToElement(driver, page.getWidgetFactoryElement());
 
-        boolean isScrolledIntoView = (Boolean) ((JavascriptExecutor) driver).executeScript(
-                "var elem = arguments[0],                 " +
-                        "  box = elem.getBoundingClientRect(),    " +
-                        "  cx = box.left + box.width / 2,         " +
-                        "  cy = box.top + box.height / 2,         " +
-                        "  e = document.elementFromPoint(cx, cy); " +
-                        "for (; e; e = e.parentElement) {          " +
-                        "  if (e === elem)                        " +
-                        "    return true;                         " +
-                        "}                                        " +
-                        "return false;                            ", widgetFactoryElement);
-
-        assertTrue(isScrolledIntoView, "The element with text 'Widget Factory' should be scrolled into view.");
+        assertTrue(page.getWidgetFactoryElement().isDisplayed(), "The element with text 'Widget Factory' should be visible on the page.");
+        Thread.sleep(1000);
     }
 
     @Test
     public void clickElement() throws InterruptedException {
-        driver.get("https://jqueryui.com/droppable/");
-        WebElement widgetFactoryElement = driver.findElement(By.xpath("//*[text()='Widget Factory']"));
+        DroppablePage page = new DroppablePage(driver)
+            .openPage();
 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", widgetFactoryElement);
+        ActionsUtils.scrollToElement(driver, page.getWidgetFactoryElement());
+        ActionsUtils.clickElement(driver, page.getWidgetFactoryElement());
 
         String expectedUrl = "https://jqueryui.com/widget/";
         String currentUrl = driver.getCurrentUrl();
