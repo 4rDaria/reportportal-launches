@@ -38,7 +38,7 @@ public class HamburgerMenu extends ElWrapper {
 
     public void deleteLaunch(WebDriver driver) throws InterruptedException {
         deleteLaunchModal(driver).buttonWithText(DELETE_ACTION).click();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         driver.navigate().refresh();
     }
 }
