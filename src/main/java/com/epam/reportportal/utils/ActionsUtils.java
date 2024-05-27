@@ -31,8 +31,6 @@ public class ActionsUtils {
             }
         } catch (NoSuchElementException e) {
             LOGGER.warn("Element " + element + " was not found in DOM " + e.getStackTrace());
-        } catch (Exception e) {
-            LOGGER.warn("Unable to resize" + element + " - " + e.getStackTrace());
         }
         //return elementIsResized;
     }
