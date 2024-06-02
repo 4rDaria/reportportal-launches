@@ -47,4 +47,11 @@ public class DateTimeUtils {
 
         return dateTimeListStringFormat;
     }
+
+    public static List<String> ascendingSortDateTimeStringFormat(List<String> dateTimeListStringFormat) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        dateTimeListStringFormat.sort(Comparator.comparing((String s) -> LocalDateTime.parse(s, formatter)));
+
+        return dateTimeListStringFormat;
+    }
 }
