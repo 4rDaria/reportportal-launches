@@ -1,0 +1,59 @@
+#!groovy
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('H/5 * * * *')
+        cron('H 1 * * *')
+    }
+
+    stages {
+        stage("Prepare") {
+            steps {
+                git branch: 'master', url: 'https://github.com/4rDaria/reportportal-launches'
+            }
+        }
+
+        stage("Build and start test image") {
+            steps {
+                sh "docker-composer build"
+                sh "docker-compose up -d"
+                waitUntilServicesReady
+            }
+        }
+
+        stage("Run tests") {
+            steps {
+                sh "docker-compose exec -T php-fpm composer --no-ansi --no-interaction tests-ci"
+                sh "docker-compose exec -T php-fpm composer --no-ansi --no-interaction behat-ci"
+            }
+
+            post {
+                always {
+                    junit "build/junit/*.xml"
+                    step([
+                            $class              : "CloverPublisher",
+                            cloverReportDir     : "build/coverage",
+                            cloverReportFileName: "clover.xml"
+                    ])
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh "docker-compose down || true"
+        }
+
+        success {
+            bitbucketStatusNotify buildState: "SUCCESSFUL"
+        }
+
+        failure {
+            bitbucketStatusNotify buildState: "FAILED"
+        }
+    }
+}
