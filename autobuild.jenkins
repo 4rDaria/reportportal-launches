@@ -25,27 +25,8 @@ pipeline {
             post {
                 always {
                     junit "build/junit/*.xml"
-                    step([
-                            $class              : "CloverPublisher",
-                            cloverReportDir     : "build/coverage",
-                            cloverReportFileName: "clover.xml"
-                    ])
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            sh "docker-compose down || true"
-        }
-
-        success {
-            bitbucketStatusNotify buildState: "SUCCESSFUL"
-        }
-
-        failure {
-            bitbucketStatusNotify buildState: "FAILED"
         }
     }
 }
