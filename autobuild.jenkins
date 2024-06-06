@@ -4,11 +4,6 @@ properties([disableConcurrentBuilds()])
 pipeline {
     agent any
 
-    triggers {
-        pollSCM('H/5 * * * *')
-        cron('H 1 * * *')
-    }
-
     stages {
         stage("Prepare") {
             steps {
