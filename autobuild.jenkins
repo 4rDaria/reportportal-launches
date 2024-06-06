@@ -13,13 +13,13 @@ pipeline {
 
         stage("Build and start test image") {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
 
         stage("Run tests") {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
 
             post {
