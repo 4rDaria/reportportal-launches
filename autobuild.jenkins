@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage("Prepare") {
             steps {
-                git branch: 'module_9', url: 'https://github.com/4rDaria/reportportal-launches/tree'
+                git branch: 'module_9', url: 'https://github.com/4rDaria/reportportal-launches'
             }
         }
 
