@@ -7,22 +7,19 @@ pipeline {
     stages {
         stage("Prepare") {
             steps {
-                git branch: 'master', url: 'https://github.com/4rDaria/reportportal-launches'
+                git branch: 'module_9', url: 'https://github.com/4rDaria/reportportal-launches'
             }
         }
 
         stage("Build and start test image") {
             steps {
-                sh "docker-composer build"
-                sh "docker-compose up -d"
-                waitUntilServicesReady
+                sh 'mvn clean install'
             }
         }
 
         stage("Run tests") {
             steps {
-                sh "docker-compose exec -T php-fpm composer --no-ansi --no-interaction tests-ci"
-                sh "docker-compose exec -T php-fpm composer --no-ansi --no-interaction behat-ci"
+                sh 'mvn test'
             }
 
             post {
