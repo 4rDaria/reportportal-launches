@@ -13,13 +13,13 @@ pipeline {
 
         stage("Build and start test image") {
             steps {
-                bat 'mvn clean install -Dmaven.scm.provider.cvs.implementation=cvs_native'
+                bat 'mvn clean install'
             }
         }
 
         stage("Run tests") {
             steps {
-                bat 'mvn test -Dmaven.scm.provider.cvs.implementation=cvs_native'
+                bat 'mvn test'
             }
 
             post {
