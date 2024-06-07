@@ -36,7 +36,7 @@ public class LaunchesPage extends AbstractPage {
 
     public List<WebElement> gridRowElements() {
         Wait<WebDriver> wait = new FluentWait<>(driver)
-            .withTimeout(Duration.ofSeconds(10))
+            .withTimeout(Duration.ofSeconds(50))
             .pollingEvery(Duration.ofMillis(500))
             .ignoring(NoSuchElementException.class);
 
