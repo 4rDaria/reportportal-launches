@@ -8,16 +8,8 @@ pipeline {
         pollSCM('* * * * *')
     }
 
-    options{
-        timestamps()
-    }
-
     tools {
         maven 'M3'
-    }
-
-    environment {
-        SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
 
     stages {
