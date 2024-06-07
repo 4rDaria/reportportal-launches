@@ -4,6 +4,14 @@ properties([disableConcurrentBuilds()])
 pipeline {
     agent any
 
+    triggers {
+        pollSCM('* * * * *')
+    }
+
+    options{
+        timestamps()
+    }
+
     tools {
         maven 'M3'
     }
