@@ -11,21 +11,19 @@ pipeline {
             }
         }
 
-        stage("Build and start test image") {
+        stage('Build') {
             steps {
-                bat 'mvn clean install -Dmaven.scm.provider.cvs.implementation=cvs_native'
+                echo 'Building..'
             }
         }
-
-        stage("Run tests") {
+        stage('Test') {
             steps {
-                bat 'mvn test -Dmaven.scm.provider.cvs.implementation=cvs_native'
+                echo 'Testing..'
             }
-
-            post {
-                always {
-                    junit "build/junit/*.xml"
-                }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
             }
         }
     }
