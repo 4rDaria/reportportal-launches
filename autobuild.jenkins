@@ -4,6 +4,10 @@ properties([disableConcurrentBuilds()])
 pipeline {
     agent any
 
+    tools {
+        maven 'M3'
+    }
+
     stages {
         stage("Prepare") {
             steps {
@@ -13,18 +17,16 @@ pipeline {
 
         stage("Build and start test image") {
             steps {
-                bat 'mvn clean install'
+                withMaven(maven: 'M3') {
+                    bat 'mvn clean install'
+                }
             }
         }
 
         stage("Run tests") {
             steps {
-                bat 'mvn test'
-            }
-
-            post {
-                always {
-                    junit "build/junit/*.xml"
+                withMaven(maven: 'M3') {
+                    bat 'mvn test'
                 }
             }
         }
