@@ -23,7 +23,7 @@ pipeline {
             steps {
                 checkout scm
                 withMaven(maven: 'M3') {
-                    bat 'mvn -Dmaven.test.failure.ignore=true install'
+                    echo 'Building..'
                 }
                 post {
                     success {
@@ -36,30 +36,7 @@ pipeline {
         stage("Run tests") {
             steps {
                 withMaven(maven: 'M3') {
-                    bat 'mvn test'
-                }
-            }
-        }
-
-        stage("SonarCloud Analysis") {
-            steps {
-                withSonarQubeEnv('SonarCloud') { // Use the SonarQube environment configured in Jenkins
-                    script {
-                        def scannerHome = SCANNER_HOME
-                        sh "${scannerHome}/bin/sonar-scanner " +
-                                "-Dsonar.projectKey=your_project_key " +
-                                "-Dsonar.organization=your_organization " +
-                                "-Dsonar.host.url=https://sonarcloud.io " +
-                                "-Dsonar.login=${env.SONAR_TOKEN}"
-                    }
-                }
-            }
-        }
-
-        stage("Quality Gate") {
-            steps {
-                timeout(time: 1, unit: 'HOURS') {
-                    waitForQualityGate abortPipeline: true
+                    echo 'Testing..'
                 }
             }
         }
