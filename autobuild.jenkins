@@ -8,10 +8,6 @@ pipeline {
         maven 'M3'
     }
 
-    triggers {
-        githubPullRequest()
-    }
-
     stages {
         stage("Prepare") {
             steps {
