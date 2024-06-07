@@ -8,6 +8,10 @@ pipeline {
         maven 'M3'
     }
 
+    triggers {
+        githubPullRequest()
+    }
+
     stages {
         stage("Prepare") {
             steps {
@@ -17,6 +21,7 @@ pipeline {
 
         stage("Build and start test image") {
             steps {
+                checkout scm
                 withMaven(maven: 'M3') {
                     bat 'mvn clean install'
                 }
@@ -29,6 +34,15 @@ pipeline {
                     bat 'mvn test'
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            githubNotify context: 'Build', status: 'SUCCESS', description: 'Build successful'
+        }
+        failure {
+            githubNotify context: 'Build', status: 'FAILURE', description: 'Build failed'
         }
     }
 }
