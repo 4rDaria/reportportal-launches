@@ -31,7 +31,7 @@ pipeline {
             steps {
                 checkout scm
                 withMaven(maven: 'M3') {
-                    echo 'Building..'
+                    bat 'mvn clean install'
                 }
                 post {
                     success {
@@ -45,6 +45,7 @@ pipeline {
             steps {
                 withMaven(maven: 'M3') {
                     echo 'Testing..'
+                    bat 'mvn -D clean test'
                 }
             }
         }
