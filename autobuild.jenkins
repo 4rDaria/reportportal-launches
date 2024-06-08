@@ -4,6 +4,10 @@ properties([disableConcurrentBuilds()])
 pipeline {
     agent any
 
+    environment {
+        SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'
+    }
+
     triggers {
         pollSCM('* * * * *')
     }
@@ -16,6 +20,9 @@ pipeline {
         stage("Prepare") {
             steps {
                 echo 'Prepare'
+                bat """
+                curl -X POST -H 'Content-type: application/json' --data '{"text":"Test run started"}' %SLACK_WEBHOOK_URL%
+                """
                 git branch: 'module_9', url: 'https://github.com/4rDaria/reportportal-launches'
             }
         }
@@ -23,6 +30,9 @@ pipeline {
         stage('Example') {
             steps {
                 echo 'Hello World'
+                bat """
+                    curl -X POST -H "Content-type: application/json" --data '{"text":"Test run finished"}' %SLACK_WEBHOOK_URL%
+                    """
             }
         }
     }
