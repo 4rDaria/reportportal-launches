@@ -5,6 +5,7 @@ import static com.epam.reportportal.utils.configuration.EnvironmentConfiguration
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.epam.reportportal.junit5.ReportPortalExtension;
 import com.epam.reportportal.model.user.User;
 import com.epam.reportportal.pages.common.ModalWindow;
 import com.epam.reportportal.pages.launches.ActionMenu;
@@ -21,6 +22,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.*;
 
 import org.junit.Assert;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtendWith(ReportPortalExtension.class)
 public class LaunchesPageTest extends BaseTest {
 
     private static final Logger LOGGER = LogManager.getRootLogger();
@@ -58,6 +61,7 @@ public class LaunchesPageTest extends BaseTest {
 
         List<String> expectedStartedTimes = descendingSortDateTimeStringFormat(getLaunchesStartTime(launchesPage.gridRowElements()));
 
+        LOGGER.info("launches list sorted by most recent by default");
         assertEquals(expectedStartedTimes, actualStartedTimes);
     }
 
@@ -82,6 +86,7 @@ public class LaunchesPageTest extends BaseTest {
 
         List<Integer> orderedCounts = countsByCategory(launchesPage.gridRowElements(), category);
 
+        LOGGER.info("user can resort launches by each categories count");
         Assert.assertTrue(counts.equals(orderedCounts));
     }
 
@@ -114,6 +119,8 @@ public class LaunchesPageTest extends BaseTest {
                 LOGGER.warn("Element " + category + " not found in launch: " + id);
             }
         }
+
+        LOGGER.info("each launches contains all test count data");
         assertTrue(eachLaunchesContainsAllTestCountData);
 
     }
@@ -133,6 +140,8 @@ public class LaunchesPageTest extends BaseTest {
 
         //unselect launches
         toggleSelection(numberLaunchesToCompare);
+
+        LOGGER.info("user is able to select several launches and compare them");
     }
 
     private void toggleSelection(List<GridRow> numberLaunchesToCompare) {
@@ -184,6 +193,8 @@ public class LaunchesPageTest extends BaseTest {
 
             driver.navigate().back();
         }
+
+        LOGGER.info("user is able to move to appropriate launch via donut element");
     }
 
     @ParameterizedTest(name = "{index} => user is able to move to appropriate launch clicking ''{0}''")
@@ -205,6 +216,8 @@ public class LaunchesPageTest extends BaseTest {
                 + "in.type%3DSTEP%26filter.in.status%3D" + param;
             assertEquals(expectedUrl, driver.getCurrentUrl());
         }
+
+        LOGGER.info("user is able to move to appropriate launch clicking count element");
     }
 
 }
