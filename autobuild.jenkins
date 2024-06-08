@@ -20,26 +20,9 @@ pipeline {
             }
         }
 
-        stage("Build") {
+        stage('Example') {
             steps {
-                checkout scm
-                withMaven(maven: 'M3') {
-                    bat 'mvn clean install'
-                }
-                post {
-                    success {
-                        junit 'target/surefire-reports/**/*.xml'
-                    }
-                }
-            }
-        }
-
-        stage("Run tests") {
-            steps {
-                echo 'Testing..'
-                withMaven(maven: 'M3') {
-                    bat 'mvn -D clean test'
-                }
+                echo 'Hello World'
             }
         }
     }
