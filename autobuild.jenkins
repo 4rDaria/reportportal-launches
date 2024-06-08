@@ -15,6 +15,7 @@ pipeline {
     stages {
         stage("Prepare") {
             steps {
+                echo 'Prepare'
                 git branch: 'module_9', url: 'https://github.com/4rDaria/reportportal-launches'
             }
         }
@@ -35,8 +36,8 @@ pipeline {
 
         stage("Run tests") {
             steps {
+                echo 'Testing..'
                 withMaven(maven: 'M3') {
-                    echo 'Testing..'
                     bat 'mvn -D clean test'
                 }
             }
