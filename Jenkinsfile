@@ -16,7 +16,7 @@ pipeline {
             steps {
                 withSonarQubeEnv(installationName: 'sq1') {
                     withMaven(maven: 'M3') {
-                        bat '/mvnw clean org.sonarsourse.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar'
+                        bat '/mvn clean org.sonarsourse.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar'
                     }
                 }
             }
