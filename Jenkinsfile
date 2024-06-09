@@ -10,7 +10,7 @@ pipeline {
         stage('Scan') {
             steps {
                 withSonarQubeEnv(installationName: 'sq1') {
-                  bat '/mvnw clean org.sonarsourse.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar'
+                  bat '/mvn clean org.sonarsourse.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar'
                 }
             }
         }
