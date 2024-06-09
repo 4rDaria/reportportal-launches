@@ -5,7 +5,7 @@ pipeline {
     agent any
 
     environment {
-        SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'
+        SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'
     }
 
     triggers {
@@ -33,6 +33,14 @@ pipeline {
                 bat """
                     curl -X POST -H "Content-type: application/json" --data '{"text":"Test run finished"}' %SLACK_WEBHOOK_URL%
                     """
+            }
+        }
+
+        post {
+            always {
+                echo 'Slack Notification'
+                slackSend channel: '#cicd'
+                message: "Slack Notification"
             }
         }
     }
