@@ -34,14 +34,6 @@ pipeline {
                     curl -X POST -H "Content-type: application/json" --data '{"text":"Test run finished"}' %SLACK_WEBHOOK_URL%
                     """
             }
-
-            post {
-                always {
-                    echo 'Slack Notification'
-                    slackSend channel: '#cicd'
-                    message: "Slack Notification"
-                }
-            }
         }
     }
 }
