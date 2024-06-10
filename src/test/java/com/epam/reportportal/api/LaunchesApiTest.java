@@ -24,15 +24,6 @@ public class LaunchesApiTest {
     }
 
     @Test
-    public void getLaunchesByFilters() {
-        //prepare data
-        //perform request
-        //assert response.statusCode etc.
-        logger.info("getLaunchesByFilters");
-        assertTrue(true);
-    }
-
-    @Test
     public void removeLaunchById() {
         //get Launch id for launch delete
         //perform request
