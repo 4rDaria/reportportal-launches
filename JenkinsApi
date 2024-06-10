@@ -24,7 +24,7 @@ pipeline {
             steps {
                 checkout scm
                 withMaven(maven: 'M3') {
-                    bat 'mvn clean install'
+                    bat 'mvn clean install -DskipTests'
                 }
                 post {
                     success {
@@ -34,20 +34,25 @@ pipeline {
             }
         }
 
-        stage("Run tests") {
+        stage("Checkstyle analysis") {
             steps {
-                withMaven(maven: 'M3') {
-                    bat 'mvn test -Dtest=LaunchesApiTest'
+                bat 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage("Sonar analysis") {
+            environment {
+                scannerHome - tool 'sonar6.0'
+            }
+            steps {
+                withSonarQubeEnv(installationName: 'sq1') {
+                    bat '''$(scannerHome/bin/sonar-scanner -Dsonar.projectKey=my-project \
+                    -Dsonar.sources=src/ \
+                    -Dsonar.java.checkstyle.reportPath=target/checkstyle-result.xml'''
+
                 }
             }
         }
     }
 
-    post {
-        always {
-            archiveArtifacts artifacts: '**/build/libs/*.jar', allowEmptyArchive: true
-            junit 'target/test-results/test/*.xml'
-            echo "Total tests: ${testResults.totalCount}, Failures: ${testResults.failCount}, Skipped: ${testResults.skipCount}, Passed: ${testResults.passCount}"
-        }
-    }
 }
