@@ -1,0 +1,54 @@
+pipeline:
+  agent: any
+
+  options:
+    - disableConcurrentBuilds: {}
+
+  triggers:
+    - pollSCM: 'H/5 * * * *'
+
+  tools:
+    - maven: 'M3'
+
+  stages:
+    - stage: "Prepare"
+      steps:
+        - echo: 'Prepare'
+        - git:
+            branch: 'module_9'
+            url: 'https://github.com/4rDaria/reportportal-launches'
+
+    - stage: "Build"
+      steps:
+        - checkout: scm
+        - withMaven:
+            maven: 'M3'
+            steps:
+              - bat: 'mvn clean install'
+      post:
+        success:
+          - junit: 'target/surefire-reports/**/*.xml'
+
+    - stage: "Run tests"
+      steps:
+        - script:
+            - office365ConnectorSend:
+                message: "Test run started"
+                webhookUrl: "https://epam.webhook.office.com/webhookb2/ae86bb90-c0a5-49ce-b53d-089f88d9dc56@b41b72d0-4e9f-4c26-8a69-f949f367c91d/JenkinsCI/0c01a38f0da2442b857da65f54dc70a7/2957134f-1c48-45ea-990f-d11121d9ed9c"
+        - withMaven:
+            maven: 'M3'
+            steps:
+              - bat: 'mvn test'
+        - script:
+            - office365ConnectorSend:
+                message: "Test run ended"
+                webhookUrl: "https://epam.webhook.office.com/webhookb2/ae86bb90-c0a5-49ce-b53d-089f88d9dc56@b41b72d0-4e9f-4c26-8a69-f949f367c91d/JenkinsCI/0c01a38f0da2442b857da65f54dc70a7/2957134f-1c48-45ea-990f-d11121d9ed9c"
+
+  post:
+    always:
+      - archiveArtifacts:
+          artifacts: '**/build/libs/*.jar'
+          allowEmptyArchive: true
+      - junit: 'target/test-results/test/*.xml'
+      - script:
+          - echo: "Total tests: ${testResults.totalCount}, Failures: ${testResults.failCount}, Skipped: ${testResults.skipCount}, Passed: ${testResults.passCount}"
