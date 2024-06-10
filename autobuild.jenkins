@@ -53,14 +53,5 @@ pipeline {
                 }
             }
         }
-
-        stage('Example') {
-            steps {
-                echo 'Hello World'
-                bat """
-                    curl -X POST -H "Content-type: application/json" --data '{"text":"Test run finished"}' %SLACK_WEBHOOK_URL%
-                    """
-            }
-        }
     }
 }
