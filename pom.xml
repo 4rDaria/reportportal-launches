@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.epam.reportportal</groupId>
@@ -22,11 +22,20 @@
         <jackson-databind.version>2.17.0</jackson-databind.version>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <junit.platform.runner.version>1.10.2</junit.platform.runner.version>
-        <selenide.version>7.2.1</selenide.version>
         <commons-io.version>2.15.1</commons-io.version>
         <logger-java-log4j.version>5.1.8</logger-java-log4j.version>
         <reportportal.agent.version>5.1.11</reportportal.agent.version>
         <reportportal.logger.version>5.1.8</reportportal.logger.version>
+        <selenium.version>4.20.0</selenium.version>
+        <webdrivermanager.version>5.8.0</webdrivermanager.version>
+        <jcommander.version>1.82</jcommander.version>
+        <image-comparison.version>4.4.0</image-comparison.version>
+        <saucerest.version>2.4.0</saucerest.version>
+        <commons-imaging.version>1.0.0-alpha5</commons-imaging.version>
+
+        <!-- reportportal dependency versions -->
+        <reportportal.agent-java-junit5.version>5.1.11</reportportal.agent-java-junit5.version>
+        <reportportal.logger-java-logback.version>5.1.6</reportportal.logger-java-logback.version>
     </properties>
 
     <dependencies>
@@ -90,24 +99,60 @@
 
         <!-- test -->
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.9.0</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
+            <version>${junit.platform.runner.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.82</version>
+            <version>${jcommander.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.romankh3</groupId>
+            <artifactId>image-comparison</artifactId>
+            <version>${image-comparison.version}</version>
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
 
         <dependency>
-            <groupId>com.codeborne</groupId>
-            <artifactId>selenide</artifactId>
-            <version>${selenide.version}</version>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.saucelabs</groupId>
+            <artifactId>saucerest</artifactId>
+            <version>${saucerest.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -115,18 +160,63 @@
             <version>${commons-io.version}</version>
         </dependency>
 
-        <!-- reportportal dependencies -->
         <dependency>
-            <groupId>com.epam.reportportal</groupId>
-            <artifactId>agent-java-junit5</artifactId>
-            <version>${reportportal.agent.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-imaging</artifactId>
+            <version>${commons-imaging.version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.epam.reportportal</groupId>
             <artifactId>logger-java-log4j</artifactId>
             <version>${logger-java-log4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.romankh3</groupId>
+            <artifactId>image-comparison</artifactId>
+            <version>${image-comparison.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-junit5</artifactId>
+            <version>${reportportal.agent-java-junit5.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-logback</artifactId>
+            <version>${reportportal.logger-java-logback.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
+        <!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
+        <dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.9.0.2155</version>
+        </dependency>
+
+
 
     </dependencies>
 
@@ -139,15 +229,20 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-testng</artifactId>
-                        <version>3.2.5</version>
+                        <artifactId>surefire-junit-platform</artifactId>
+                        <version>${surefire-junit-platform.version}</version>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.0.2155</version>
             </plugin>
         </plugins>
     </build>

@@ -1,0 +1,58 @@
+#!groovy
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent any
+
+    triggers {
+        cron('15 22 * * *')
+    }
+
+    tools {
+        maven 'M3'
+    }
+
+    stages {
+        stage("Prepare") {
+            steps {
+                echo 'Prepare'
+                git branch: 'module_9', url: 'https://github.com/4rDaria/reportportal-launches'
+            }
+        }
+
+        stage("Build") {
+            steps {
+                checkout scm
+                withMaven(maven: 'M3') {
+                    bat 'mvn clean install -DskipTests'
+                }
+                post {
+                    success {
+                        junit 'target/surefire-reports/**/*.xml'
+                    }
+                }
+            }
+        }
+
+        stage("Checkstyle analysis") {
+            steps {
+                bat 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage("Sonar analysis") {
+            environment {
+                scannerHome - tool 'sonar6.0'
+            }
+            steps {
+                withSonarQubeEnv(installationName: 'sq1') {
+                    bat '''$(scannerHome/bin/sonar-scanner -Dsonar.projectKey=my-project \
+                    -Dsonar.sources=src/ \
+                    -Dsonar.java.checkstyle.reportPath=target/checkstyle-result.xml'''
+
+                }
+            }
+        }
+    }
+
+}
