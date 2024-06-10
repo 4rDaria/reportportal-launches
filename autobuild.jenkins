@@ -24,7 +24,7 @@ pipeline {
             steps {
                 checkout scm
                 withMaven(maven: 'M3') {
-                    bat 'mvn -D clean test'
+                    bat 'mvn clean install'
                 }
                 post {
                     success {
@@ -52,6 +52,14 @@ pipeline {
                     )
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: '**/build/libs/*.jar', allowEmptyArchive: true
+            junit 'target/test-results/test/*.xml'
+            echo "Total tests: ${testResults.totalCount}, Failures: ${testResults.failCount}, Skipped: ${testResults.skipCount}, Passed: ${testResults.passCount}"
         }
     }
 }
