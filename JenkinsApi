@@ -1,0 +1,53 @@
+#!groovy
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent any
+
+    triggers {
+        cron('H H * * *')
+    }
+
+    tools {
+        maven 'M3'
+    }
+
+    stages {
+        stage("Prepare") {
+            steps {
+                echo 'Prepare'
+                git branch: 'module_9', url: 'https://github.com/4rDaria/reportportal-launches'
+            }
+        }
+
+        stage("Build") {
+            steps {
+                checkout scm
+                withMaven(maven: 'M3') {
+                    bat 'mvn clean install'
+                }
+                post {
+                    success {
+                        junit 'target/surefire-reports/**/*.xml'
+                    }
+                }
+            }
+        }
+
+        stage("Run tests") {
+            steps {
+                withMaven(maven: 'M3') {
+                    bat 'mvn test -Dtest=LaunchesApiTest'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: '**/build/libs/*.jar', allowEmptyArchive: true
+            junit 'target/test-results/test/*.xml'
+            echo "Total tests: ${testResults.totalCount}, Failures: ${testResults.failCount}, Skipped: ${testResults.skipCount}, Passed: ${testResults.passCount}"
+        }
+    }
+}
